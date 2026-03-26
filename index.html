@@ -13,7 +13,7 @@
     background: #0f1117;
     color: #e2e4ea;
     min-height: 100vh;
-    padding: 40px 24px;
+    padding: 88px 24px 40px;
     display: flex;
     justify-content: center;
   }
@@ -460,9 +460,52 @@
     .height-val { padding: 1px 4px; font-size: 11px; }
     .col-index, .col-preset, .col-deckcount { font-size: 13px; }
   }
+
+  /* ── SITE NAV ── */
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 48px;
+    background: #181a24;
+    border-bottom: 1px solid #252836;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .site-nav-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .site-nav-links { display: flex; gap: 4px; }
+  .site-nav-link {
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7084;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .site-nav-link:hover { color: #e2e4ea; background: rgba(255,255,255,0.05); }
+  .site-nav-link.active { color: #e2e4ea; background: rgba(99,132,255,0.12); }
 </style>
 </head>
 <body>
+<nav class="site-nav">
+  <span class="site-nav-title">Sort Dash Wiki</span>
+  <div class="site-nav-links">
+    <a href="index.html" class="site-nav-link active">Challenges</a>
+    <a href="architecture.html" class="site-nav-link">Architecture</a>
+  </div>
+</nav>
 <div class="container">
   <h1 class="page-title">Sort Dash<span>: Challenges</span></h1>
 

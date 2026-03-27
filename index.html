@@ -3,807 +3,1312 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sort Dash: Challenges</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Machina Core — Framework Reference</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --surface3: #1c2128;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --text-muted: #6e7681;
+    --accent: #58a6ff;
+    --accent2: #bc8cff;
+    --accent3: #3fb950;
+    --accent4: #f78166;
+    --accent5: #ffa657;
+
+    /* namespace colors */
+    --ns-machina:    #58a6ff;
+    --ns-gameplay:   #3fb950;
+    --ns-core:       #ffa657;
+    --ns-ui:         #bc8cff;
+    --ns-ads:        #f78166;
+    --ns-analytics:  #79c0ff;
+    --ns-league:     #d2a8ff;
+    --ns-meta:       #56d364;
+    --ns-events:     #ff7b72;
+    --ns-adapters:   #e3b341;
+    --ns-utils:      #8b949e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: #0f1117;
-    color: #e2e4ea;
-    min-height: 100vh;
-    padding: 88px 24px 40px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .container {
-    max-width: 960px;
-    width: 100%;
-  }
-
-  .page-title {
-    font-size: 36px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -1px;
-    margin-bottom: 48px;
-  }
-
-  .page-title span {
-    color: #fff;
-    font-weight: 700;
-  }
-
-  h1 {
-    font-size: 28px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
-  }
-
-  .section-number {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: inherit;
-    font-weight: 700;
-    color: #4a4e63;
-    margin-right: 2px;
-  }
-
-  .subtitle {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     font-size: 14px;
-    color: #6b7084;
-    margin-bottom: 32px;
+    line-height: 1.6;
   }
 
-  .table-wrap {
-    background: #181a24;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid #252836;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  thead th {
-    text-align: left;
-    padding: 16px 20px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: #6b7084;
-    background: #1c1f2b;
-    border-bottom: 2px solid #252836;
-    position: sticky;
-    top: 0;
-    z-index: 2;
-  }
-
-  thead th:first-child { padding-left: 28px; }
-
-  tbody tr {
-    transition: background 0.15s ease;
-    cursor: default;
-  }
-
-  tbody tr:hover {
-    background: rgba(99, 132, 255, 0.06);
-  }
-
-  tbody tr:not(:last-child) td {
-    border-bottom: 1px solid #1f2230;
-  }
-
-  tbody td {
-    padding: 14px 20px;
-    font-size: 14px;
-    vertical-align: middle;
-  }
-
-  tbody td:first-child {
-    padding-left: 28px;
-  }
-
-  .height-val {
-    display: inline-block;
-    padding: 2px 7px;
-    margin: 2px 3px 2px 0;
-    border-radius: 5px;
-    background: rgba(255,255,255,0.04);
-    font-size: 12.5px;
-    transition: background 0.15s, color 0.15s;
-  }
-
-  tbody tr:hover .height-val {
-    background: rgba(99,132,255,0.1);
-    color: #c4c8db;
-  }
-
-  /* Count indicator */
-  .height-count {
-    display: inline-block;
-    margin-left: 8px;
-    font-size: 11px;
-    color: #4a4e63;
-    font-weight: 500;
-  }
-
-  /* Zebra striping - very subtle */
-  tbody tr:nth-child(even) {
-    background: rgba(255,255,255,0.015);
-  }
-  tbody tr:nth-child(even):hover {
-    background: rgba(99, 132, 255, 0.06);
-  }
-
-  /* Section spacing */
-  .section-spacer {
-    margin-top: 56px;
-  }
-
-  /* Preset index column */
-  .col-index {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 15px;
-    color: #fff;
-    width: 80px;
-  }
-
-  /* Preset name column */
-  .col-preset {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 500;
-    font-size: 15px;
-    color: #c4c8db;
-    width: 120px;
-  }
-
-  /* DeckCount badge */
-  .col-deckcount {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 500;
-    font-size: 15px;
-    width: 120px;
-  }
-
-  .dc-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 36px;
-    padding: 3px 10px;
-    border-radius: 8px;
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 13px;
-  }
-
-  /* DeckCount color tiers */
-  .dc-low        { color: #f87171; }
-  .dc-low  .dc-badge { background: rgba(248,113,113,0.12); color: #f87171; }
-  .dc-mid-low    { color: #fb923c; }
-  .dc-mid-low .dc-badge { background: rgba(251,146,60,0.12); color: #fb923c; }
-  .dc-mid        { color: #fbbf24; }
-  .dc-mid  .dc-badge { background: rgba(251,191,36,0.12); color: #fbbf24; }
-  .dc-mid-high   { color: #34d399; }
-  .dc-mid-high .dc-badge { background: rgba(52,211,153,0.12); color: #34d399; }
-  .dc-high       { color: #60a5fa; }
-  .dc-high .dc-badge { background: rgba(96,165,250,0.12); color: #60a5fa; }
-  .dc-max        { color: #a78bfa; }
-  .dc-max  .dc-badge { background: rgba(167,139,250,0.12); color: #a78bfa; }
-
-  /* Valid heights column for presets */
-  .col-valid-heights {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: #9498ad;
-    line-height: 1.7;
-  }
-
-  /* Formation grid cards */
-  .preset-grid-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-    gap: 16px;
-  }
-
-  .preset-card {
-    background: #181a24;
-    border: 1px solid #252836;
-    border-radius: 14px;
-    padding: 16px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .preset-card:hover {
-    border-color: #3a3f55;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  }
-
-  .preset-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
-  .preset-card-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 14px;
-    color: #fff;
-  }
-
-  .preset-card-idx {
-    color: #6b7084;
-    font-weight: 400;
-    font-size: 12px;
-    margin-right: 4px;
-  }
-
-  .formation-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
-  }
-
-  .formation-grid .cell {
-    aspect-ratio: 1;
-    border-radius: 4px;
-    transition: transform 0.1s;
-  }
-
-  .formation-grid .cell-on {
-    background: rgba(45, 106, 79, 0.75);
-    border: 1px solid rgba(52, 211, 153, 0.2);
-  }
-
-  .formation-grid .cell-off {
-    background: #14161e;
-    border: 1px solid #1c1f2b;
-  }
-
-  .preset-card:hover .cell-on {
-    background: rgba(52, 211, 153, 0.45);
-  }
-
-  /* Level cards */
-  .level-grid-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-  }
-
-  .level-card {
-    background: #181a24;
-    border: 1px solid #252836;
-    border-radius: 14px;
-    padding: 18px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-
-  .level-card:hover {
-    border-color: #3a3f55;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  }
-
-  .level-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-
-  .level-card-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 18px;
-    color: #fff;
-  }
-
-  .level-card-preset-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    font-size: 13px;
-    padding: 3px 10px;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.06);
-    color: #c4c8db;
-  }
-
-  .level-card-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
-    margin-bottom: 14px;
-  }
-
-  .level-card-grid .cell {
-    aspect-ratio: 1;
-    border-radius: 3px;
-  }
-
-  .level-card-grid .cell-on {
-    background: rgba(45, 106, 79, 0.75);
-    border: 1px solid rgba(52, 211, 153, 0.2);
-  }
-
-  .level-card-grid .cell-off {
-    background: #14161e;
-    border: 1px solid #1c1f2b;
-  }
-
-  .level-card:hover .cell-on {
-    background: rgba(52, 211, 153, 0.45);
-  }
-
-  .level-card-stats {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 4px 10px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    align-items: center;
-  }
-
-  .level-stat {
-    display: contents;
-  }
-
-  .level-stat-label {
-    color: #6b7084;
-    font-weight: 400;
-  }
-
-  .level-stat-value {
-    color: #e2e4ea;
-    font-weight: 600;
-  }
-
-  /* Collapsible sections */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  .section-header h1 {
-    margin-bottom: 0;
-  }
-
-  .section-header:hover h1 {
-    color: #c4c8db;
-  }
-
-  .section-chevron {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #4a4e63;
-  }
-
-  .section-header:hover .section-chevron {
-    color: #6b7084;
-  }
-
-  .section.collapsed .section-chevron {
-    transform: rotate(-90deg);
-  }
-
-  .section-content {
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    max-height: 4000px;
-    opacity: 1;
-  }
-
-  .section.collapsed .section-content {
-    max-height: 0;
-    opacity: 0;
-  }
-
-  .section .subtitle {
-    margin-top: 6px;
-  }
-
-  .levels-status {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: #4a4e63;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .levels-status.success {
-    color: #34d399;
-  }
-
-  .levels-status.error {
-    color: #f87171;
-  }
-
-  .levels-status.loading {
-    color: #6b7084;
-  }
-
-  .levels-loading-spinner {
-    width: 12px;
-    height: 12px;
-    border: 2px solid #2a2d3a;
-    border-top-color: #6b7084;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  @media (max-width: 640px) {
-    body { padding: 16px 8px; }
-    h1 { font-size: 22px; }
-    thead th, tbody td { padding: 10px 12px; font-size: 12px; }
-    .height-val { padding: 1px 4px; font-size: 11px; }
-    .col-index, .col-preset, .col-deckcount { font-size: 13px; }
-  }
-
-  /* ── SITE NAV ── */
+  /* SITE NAV */
   .site-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    height: 48px;
-    background: #181a24;
-    border-bottom: 1px solid #252836;
-    font-family: 'DM Sans', sans-serif;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 48px;
+    background: #181a24; border-bottom: 1px solid #252836;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   }
-  .site-nav-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 14px;
-    color: #fff;
-    letter-spacing: -0.3px;
-  }
+  .site-nav-title { font-family: monospace; font-weight: 700; font-size: 14px; color: #fff; letter-spacing: -0.3px; }
   .site-nav-links { display: flex; gap: 4px; }
   .site-nav-link {
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #6b7084;
-    text-decoration: none;
-    transition: background 0.15s, color 0.15s;
+    padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    color: #6b7084; text-decoration: none; transition: background 0.15s, color 0.15s;
   }
   .site-nav-link:hover { color: #e2e4ea; background: rgba(255,255,255,0.05); }
   .site-nav-link.active { color: #e2e4ea; background: rgba(99,132,255,0.12); }
+
+  /* NAV */
+  nav.mc-nav {
+    position: fixed; top: 48px; left: 0; right: 0; z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; gap: 8px; height: 52px;
+  }
+  .nav-logo { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: 0.02em; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 4px; margin-left: 24px; }
+  .nav-links a {
+    color: var(--text-dim); text-decoration: none; font-size: 13px;
+    padding: 6px 10px; border-radius: 6px; transition: all 0.15s;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--surface2); }
+  .nav-tag {
+    margin-left: auto;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-dim); font-size: 11px; font-family: monospace;
+    padding: 3px 8px; border-radius: 4px;
+  }
+
+  /* LAYOUT */
+  .page { padding-top: 100px; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #161b22 0%, #1c2128 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 12px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--text-dim); font-size: 1rem; max-width: 600px; margin: 0 auto 24px; }
+  .hero-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--text-dim);
+    font-family: monospace;
+  }
+  .badge.accent { border-color: var(--accent); color: var(--accent); }
+
+  /* SECTION */
+  section { margin-bottom: 56px; }
+  .section-title {
+    font-size: 1.2rem; font-weight: 700; color: var(--text);
+    margin-bottom: 20px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-icon { font-size: 1rem; }
+
+  /* NAMESPACE VISUALIZATION */
+  .ns-map {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .ns-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+    border-left: 3px solid var(--ns-machina);
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: default;
+  }
+  .ns-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+  .ns-card-name { font-size: 12px; font-family: monospace; font-weight: 600; margin-bottom: 4px; }
+  .ns-card-folder { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+  .ns-card-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+  .ns-card-count { font-size: 11px; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+
+  /* COLOR DOTS per namespace */
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+
+  /* CLASS HIERARCHY */
+  .hierarchy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+
+  .hier-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .hier-header {
+    padding: 12px 16px; background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600; font-size: 13px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hier-body { padding: 12px 16px; }
+  .hier-tree { font-family: monospace; font-size: 12px; line-height: 1.9; }
+  .hier-tree .root { color: var(--accent); font-weight: 700; }
+  .hier-tree .abstract { color: var(--accent2); }
+  .hier-tree .concrete { color: var(--accent3); }
+  .hier-tree .interface { color: var(--accent5); font-style: italic; }
+  .hier-tree .note { color: var(--text-muted); font-size: 11px; }
+  .indent1 { padding-left: 16px; }
+  .indent2 { padding-left: 32px; }
+  .indent3 { padding-left: 48px; }
+
+  /* CLASS TABLE */
+  .class-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .class-table th {
+    text-align: left; padding: 10px 14px;
+    background: var(--surface2); color: var(--text-dim); font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 100px; z-index: 10;
+  }
+  .class-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .class-table tr:last-child td { border-bottom: none; }
+  .class-table tr:hover td { background: var(--surface2); }
+  .class-table .mono { font-family: monospace; font-size: 12px; }
+  .class-table .ns-tag {
+    display: inline-block; font-family: monospace; font-size: 11px;
+    padding: 2px 7px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border);
+  }
+  .class-table .modifier { color: var(--text-muted); font-size: 11px; }
+  .class-table .desc { color: var(--text-dim); }
+
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; overflow-x: auto; }
+
+  /* TAG PILLS */
+  .pill {
+    display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px;
+    font-weight: 600; letter-spacing: 0.03em; vertical-align: middle;
+  }
+  .pill-abstract { background: rgba(188,140,255,0.15); color: var(--accent2); border: 1px solid rgba(188,140,255,0.3); }
+  .pill-interface { background: rgba(255,166,87,0.15); color: var(--accent5); border: 1px solid rgba(255,166,87,0.3); }
+  .pill-enum { background: rgba(79,192,80,0.15); color: var(--accent3); border: 1px solid rgba(79,192,80,0.3); }
+  .pill-singleton { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+  .pill-so { background: rgba(227,179,65,0.15); color: var(--accent5); border: 1px solid rgba(227,179,65,0.3); }
+
+  /* TWO-COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px; padding: 14px 18px; margin-bottom: 20px;
+    font-size: 13px; color: var(--text-dim);
+  }
+  .callout strong { color: var(--text); }
+  .callout code { font-family: monospace; background: var(--surface); padding: 1px 5px; border-radius: 3px; color: var(--accent); font-size: 12px; }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 18px; margin: 12px 0;
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px;
+    line-height: 1.7; color: var(--text); overflow-x: auto;
+  }
+  .kw { color: #ff7b72; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .cm { color: #8b949e; font-style: italic; }
+  .attr { color: #ffa657; }
+
+  /* STATE MACHINE */
+  .state-flow {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 16px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border);
+    margin: 12px 0;
+  }
+  .state-node {
+    background: var(--surface3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 6px 12px; font-size: 12px; font-family: monospace;
+    font-weight: 600; color: var(--text);
+  }
+  .state-node.start { border-color: var(--accent3); color: var(--accent3); }
+  .state-node.end { border-color: var(--accent4); color: var(--accent4); }
+  .state-node.special { border-color: var(--accent5); color: var(--accent5); }
+  .state-arrow { color: var(--text-muted); font-size: 16px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border); padding: 20px 24px;
+    text-align: center; color: var(--text-muted); font-size: 12px;
+    margin-top: 40px;
+  }
 </style>
 </head>
 <body>
-<nav class="site-nav">
+
+<div class="site-nav">
   <span class="site-nav-title">Sort Dash Wiki</span>
   <div class="site-nav-links">
-    <a href="index.html" class="site-nav-link active">Challenges</a>
-    <a href="architecture.html" class="site-nav-link">Architecture</a>
-  </div>
-</nav>
-<div class="container">
-  <h1 class="page-title">Sort Dash<span>: Challenges</span></h1>
-
-  <div class="section" id="sec-levels">
-    <div class="section-header" onclick="toggleSection('sec-levels')">
-      <svg class="section-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
-      <h1><span class="section-number">1.</span> Tower Challenge Levels</h1>
-    </div>
-    <div class="section-content">
-      <p class="subtitle">Remote config level breakdown with formation grid, deck count, and computed total card count</p>
-      <div id="levels-status" class="levels-status loading"><div class="levels-loading-spinner"></div> Syncing from Google Sheets...</div>
-      <div id="level-cards" class="level-grid-section"></div>
-    </div>
-  </div>
-
-  <div class="section section-spacer" id="sec-presets-grid">
-    <div class="section-header" onclick="toggleSection('sec-presets-grid')">
-      <svg class="section-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
-      <h1><span class="section-number">2.</span> Formation Presets Preview</h1>
-    </div>
-    <div class="section-content">
-      <p class="subtitle">Visual layout of each 5x5 Tower formation preset — green = active cell, dark = inactive</p>
-      <div id="preset-cards" class="preset-grid-section"></div>
-    </div>
-  </div>
-
-  <div class="section section-spacer" id="sec-valid-heights">
-    <div class="section-header" onclick="toggleSection('sec-valid-heights')">
-      <svg class="section-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
-      <h1><span class="section-number">3.</span> Valid Heights</h1>
-    </div>
-    <div class="section-content">
-      <p class="subtitle">DeckCount (active cells) and valid heights for each preset in FormationPresetConfig-Tower-5-Cols</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Index</th>
-              <th>Preset</th>
-              <th>Deck Count</th>
-              <th>Valid Heights ≤ 25</th>
-            </tr>
-          </thead>
-          <tbody id="tbody2"></tbody>
-        </table>
-      </div>
-    </div>
+    <a href="index.html" class="site-nav-link active">Machina Core</a>
+    <a href="sort-dash.html" class="site-nav-link">Sort Dash</a>
   </div>
 </div>
 
-<script>
-const data = [
-  { d: 5,  step: 4,  heights: [4,8,12,16,20,24] },
-  { d: 6,  step: 10, heights: [10,20] },
-  { d: 7,  step: 20, heights: [20] },
-  { d: 8,  step: 5,  heights: [5,10,15,20,25] },
-  { d: 9,  step: 20, heights: [20] },
-  { d: 10, step: 2,  heights: [2,4,6,8,10,12,14,16,18,20,22,24] },
-  { d: 11, step: 20, heights: [20] },
-  { d: 12, step: 5,  heights: [5,10,15,20,25] },
-  { d: 13, step: 20, heights: [20] },
-  { d: 14, step: 10, heights: [10,20] },
-  { d: 15, step: 4,  heights: [4,8,12,16,20,24] },
-  { d: 16, step: 5,  heights: [5,10,15,20,25] },
-  { d: 17, step: 20, heights: [20] },
-  { d: 18, step: 10, heights: [10,20] },
-  { d: 19, step: 20, heights: [20] },
-  { d: 20, step: 1,  heights: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25] },
-  { d: 21, step: 20, heights: [20] },
-  { d: 22, step: 10, heights: [10,20] },
-  { d: 23, step: 20, heights: [20] },
-  { d: 24, step: 5,  heights: [5,10,15,20,25] },
-  { d: 25, step: 4,  heights: [4,8,12,16,20,24] },
-];
+<nav class="mc-nav">
+  <div class="nav-logo">Machina<span>Core</span></div>
+  <div class="nav-links">
+    <a href="#namespaces">Namespaces</a>
+    <a href="#hierarchy">Hierarchy</a>
+    <a href="#managers">Managers</a>
+    <a href="#gameplay">Gameplay</a>
+    <a href="#ui">UI</a>
+    <a href="#events">Live Ops</a>
+    <a href="#patterns">Patterns</a>
+    <a href="#dependencies">Dependencies</a>
+  </div>
+  <div class="nav-tag">Unity 2022.3 LTS · C#</div>
+</nav>
 
-const heightsLookup = {};
-data.forEach(row => { heightsLookup[row.d] = row.heights; });
+<div class="page">
 
-const presets = [
-  { idx: 0,  name: 'A', deckCount: 25, grid: [1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1] },
-  { idx: 1,  name: 'B', deckCount: 9,  grid: [0,0,1,0,0, 0,0,1,0,0, 1,1,1,1,1, 0,0,1,0,0, 0,0,1,0,0] },
-  { idx: 2,  name: 'C', deckCount: 13, grid: [1,0,1,0,1, 0,0,1,0,0, 1,1,1,1,1, 0,0,1,0,0, 1,0,1,0,1] },
-  { idx: 3,  name: 'D', deckCount: 13, grid: [0,0,1,0,0, 0,1,1,1,0, 1,1,1,1,1, 0,1,1,1,0, 0,0,1,0,0] },
-  { idx: 4,  name: 'E', deckCount: 17, grid: [1,0,1,0,1, 0,1,1,1,0, 1,1,1,1,1, 0,1,1,1,0, 1,0,1,0,1] },
-  { idx: 5,  name: 'F', deckCount: 16, grid: [1,1,0,1,1, 1,1,0,1,1, 0,0,0,0,0, 1,1,0,1,1, 1,1,0,1,1] },
-  { idx: 6,  name: 'G', deckCount: 15, grid: [0,0,0,1,1, 0,1,1,1,1, 0,1,1,1,0, 1,1,1,1,0, 1,1,0,0,0] },
-  { idx: 7,  name: 'H', deckCount: 9,  grid: [0,0,0,0,0, 0,1,1,1,0, 0,1,1,1,0, 0,1,1,1,0, 0,0,0,0,0] },
-  { idx: 8,  name: 'I', deckCount: 9,  grid: [1,0,0,0,1, 0,1,0,1,0, 0,0,1,0,0, 0,1,0,1,0, 1,0,0,0,1] },
-  { idx: 9,  name: 'J', deckCount: 20, grid: [1,1,1,1,1, 1,1,0,1,1, 1,0,0,0,1, 1,1,0,1,1, 1,1,1,1,1] },
-  { idx: 10, name: 'K', deckCount: 16, grid: [0,1,0,1,0, 1,1,1,1,1, 0,1,0,1,0, 1,1,1,1,1, 0,1,0,1,0] },
-  { idx: 11, name: 'L', deckCount: 22, grid: [1,1,1,1,1, 1,1,1,1,1, 0,1,0,1,0, 1,1,1,1,1, 1,1,1,1,1] },
-];
+<div class="hero">
+  <h1>Machina<span>Core</span> Framework</h1>
+  <p>Game-agnostic mobile game framework for Unity. Extracted from Sort Dash production codebase. Ready to use as a blank template for new games.</p>
+  <div class="hero-badges">
+    <span class="badge accent">Assets/Scripts/Machina/</span>
+    <span class="badge">Unity 2022.3.62f1 LTS</span>
+    <span class="badge">iOS + Android</span>
+    <span class="badge">~280 framework classes</span>
+    <span class="badge">Zero Machina.Sortie refs</span>
+  </div>
+</div>
 
-function dcTier(dc) {
-  if (dc <= 9)  return 'dc-low';
-  if (dc <= 13) return 'dc-mid-low';
-  if (dc <= 17) return 'dc-mid';
-  if (dc <= 19) return 'dc-mid-high';
-  if (dc <= 22) return 'dc-high';
-  return 'dc-max';
-}
+<div class="container">
 
-const tbody2 = document.getElementById('tbody2');
+<!-- ═══════════════════════ NAMESPACES ═══════════════════════ -->
+<section id="namespaces">
+  <div class="section-title"><span class="section-icon">⬡</span> Namespace Map</div>
 
-presets.forEach(p => {
-  const tr = document.createElement('tr');
-  const tier = dcTier(p.deckCount);
-  const validHeights = heightsLookup[p.deckCount] || [];
+  <div class="callout">
+    All framework code lives under <code>Assets/Scripts/Machina/</code>. Each subfolder has a canonical namespace.
+    
+  </div>
 
-  const heightChips = validHeights.map(h =>
-    `<span class="height-val">${h}</span>`
-  ).join('');
-
-  const countLabel = validHeights.length > 2
-    ? `<span class="height-count">(${validHeights.length})</span>`
-    : '';
-
-  tr.innerHTML = `
-    <td class="col-index">${p.idx}</td>
-    <td class="col-preset">${p.name}</td>
-    <td class="col-deckcount ${tier}"><span class="dc-badge">${p.deckCount}</span></td>
-    <td class="col-valid-heights">${heightChips}${countLabel}</td>
-  `;
-  tbody2.appendChild(tr);
-});
-
-// --- Google Sheets Sync Config ---
-const SHEET_ID = '1JCKJ5Dne9DQKHM-NzR-iRs1DEvhthBt5lOmBTxKMWSQ';
-const SHEET_GID = '1082608877';
-const SHEET_JSONP_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:handleSheetData&gid=${SHEET_GID}`;
-
-const COLUMN_MAP = {
-  level: 'Level',
-  preset: 'FormationPresetIndex',
-  height: 'DeckHeight',
-  colors: 'ColorCount',
-};
-
-const FALLBACK_LEVELS = [
-  { level: 1,  preset: 7,  height: 10, colors: 5 },
-  { level: 2,  preset: 1,  height: 20, colors: 10 },
-  { level: 3,  preset: 2,  height: 20, colors: 10 },
-  { level: 4,  preset: 3,  height: 15, colors: 8 },
-  { level: 5,  preset: 4,  height: 15, colors: 8 },
-  { level: 6,  preset: 0,  height: 15, colors: 9 },
-  { level: 7,  preset: 5,  height: 15, colors: 8 },
-  { level: 8,  preset: 6,  height: 15, colors: 9 },
-  { level: 9,  preset: 0,  height: 15, colors: 8 },
-  { level: 10, preset: 8,  height: 15, colors: 9 },
-  { level: 11, preset: 9,  height: 15, colors: 8 },
-  { level: 12, preset: 10, height: 15, colors: 9 },
-  { level: 13, preset: 11, height: 15, colors: 8 },
-  { level: 14, preset: 1,  height: 15, colors: 9 },
-  { level: 15, preset: 2,  height: 15, colors: 8 },
-  { level: 16, preset: 3,  height: 15, colors: 9 },
-  { level: 17, preset: 4,  height: 15, colors: 8 },
-  { level: 18, preset: 5,  height: 15, colors: 9 },
-  { level: 19, preset: 6,  height: 15, colors: 8 },
-  { level: 20, preset: 0,  height: 15, colors: 9 },
-];
-
-// --- Tower Challenge Level Cards ---
-const COLLECTION_TARGET = 10;
-
-function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
-function lcm(a, b) { return (a * b) / gcd(a, b); }
-
-function computeTotalCardCount(deckCount, towerHeight, colorCount) {
-  const T = COLLECTION_TARGET;
-  const D = deckCount;
-  const h = Math.max(towerHeight, 5);
-
-  const f1 = 5 / gcd(5, T);
-  const f2 = D / gcd(D, T);
-  const requiredMultiple = lcm(f1, f2);
-
-  const targetTotalCards = h * D;
-  const targetSetsByHeight = Math.ceil(targetTotalCards / T);
-  const minSets = Math.max(targetSetsByHeight, colorCount);
-
-  const remainder = minSets % requiredMultiple;
-  const adjustedTotalSets = remainder === 0 ? minSets : minSets + (requiredMultiple - remainder);
-
-  return adjustedTotalSets * T;
-}
-
-function parseGvizResponse(response) {
-  if (response.status !== 'ok') throw new Error(`Sheet returned status: ${response.status}`);
-
-  const table = response.table;
-  const headers = table.cols.map(c => c.label);
-  const colIdx = {};
-  for (const [key, header] of Object.entries(COLUMN_MAP)) {
-    colIdx[key] = headers.indexOf(header);
-    if (colIdx[key] === -1) throw new Error(`Column "${header}" not found`);
-  }
-
-  return table.rows
-    .map(row => ({
-      level:  parseInt(row.c[colIdx.level]?.v, 10),
-      preset: parseInt(row.c[colIdx.preset]?.v, 10),
-      height: parseInt(row.c[colIdx.height]?.v, 10),
-      colors: parseInt(row.c[colIdx.colors]?.v, 10),
-    }))
-    .filter(lv => !isNaN(lv.level))
-    .sort((a, b) => a.level - b.level);
-}
-
-const levelContainer = document.getElementById('level-cards');
-const statusEl = document.getElementById('levels-status');
-
-function setStatus(type, message) {
-  statusEl.className = 'levels-status ' + type;
-  statusEl.innerHTML = type === 'loading'
-    ? `<div class="levels-loading-spinner"></div> ${message}`
-    : message;
-}
-
-function renderLevels(levels) {
-  levelContainer.innerHTML = '';
-  levels.forEach(lv => {
-    const p = presets[lv.preset];
-    if (!p) return;
-    const dc = p.deckCount;
-    const tier = dcTier(dc);
-    const totalCards = computeTotalCardCount(dc, lv.height, lv.colors);
-
-    const cells = p.grid.map(v =>
-      `<div class="cell ${v ? 'cell-on' : 'cell-off'}"></div>`
-    ).join('');
-
-    const card = document.createElement('div');
-    card.className = 'level-card';
-    card.innerHTML = `
-      <div class="level-card-header">
-        <span class="level-card-title">Level ${lv.level}</span>
-        <span class="level-card-preset-tag"><span class="preset-card-idx">${lv.preset}</span> ${p.name}</span>
-      </div>
-      <div class="level-card-grid">${cells}</div>
-      <div class="level-card-stats">
-        <div class="level-stat"><span class="level-stat-label">Height</span><span class="level-stat-value">${lv.height}</span></div>
-        <div class="level-stat"><span class="level-stat-label">Colors</span><span class="level-stat-value">${lv.colors}</span></div>
-        <div class="level-stat"><span class="level-stat-label">Decks</span><span class="col-deckcount ${tier}"><span class="dc-badge">${dc}</span></span></div>
-        <div class="level-stat"><span class="level-stat-label">Total Cards</span><span class="level-stat-value">${totalCards}</span></div>
-      </div>
-    `;
-    levelContainer.appendChild(card);
-  });
-}
-
-// JSONP callback — called by the Google Sheets script tag
-function handleSheetData(response) {
-  try {
-    const levels = parseGvizResponse(response);
-    renderLevels(levels);
-    setStatus('success', `✓ Synced from Google Sheets · ${levels.length} levels`);
-  } catch (err) {
-    console.error('[Sheets sync]', err);
-    renderLevels(FALLBACK_LEVELS);
-    setStatus('error', `⚠ Parse error — showing cached data · ${err.message}`);
-  }
-}
-
-// Load data via JSONP (bypasses CORS from file://)
-const script = document.createElement('script');
-script.src = SHEET_JSONP_URL;
-script.onerror = function() {
-  console.error('[Sheets sync] Script load failed');
-  renderLevels(FALLBACK_LEVELS);
-  setStatus('error', `⚠ Offline — showing cached data`);
-};
-document.head.appendChild(script);
-
-// --- Formation Grid Cards ---
-const cardsContainer = document.getElementById('preset-cards');
-
-presets.forEach(p => {
-  const tier = dcTier(p.deckCount);
-  const cells = p.grid.map(v =>
-    `<div class="cell ${v ? 'cell-on' : 'cell-off'}"></div>`
-  ).join('');
-
-  const card = document.createElement('div');
-  card.className = 'preset-card';
-  card.innerHTML = `
-    <div class="preset-card-header">
-      <span class="preset-card-label"><span class="preset-card-idx">${p.idx}</span> ${p.name}</span>
-      <span class="col-deckcount ${tier}"><span class="dc-badge">${p.deckCount}</span></span>
+  <div class="ns-map">
+    <div class="ns-card" style="border-left-color: var(--ns-machina)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-machina)"></span>Machina</div>
+      <div class="ns-card-folder">_Managers/ · _Controllers/ · _Interfaces/ · _Keys/ · root files</div>
+      <div class="ns-card-desc">Core singleton managers, controllers, interface contracts, config key constants. Logger and GameObjectToggler live here too.</div>
+      <div class="ns-card-count">~25 managers + controllers</div>
     </div>
-    <div class="formation-grid">${cells}</div>
-  `;
-  cardsContainer.appendChild(card);
-});
+    <div class="ns-card" style="border-left-color: var(--ns-gameplay)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-gameplay)"></span>Machina.Gameplay</div>
+      <div class="ns-card-folder">_Gameplay/</div>
+      <div class="ns-card-desc">Abstract puzzle-game framework: Item, ItemContainer, CollectionPoint, StorageTray, InputHandler, MovementHandler, ContainerSpawner, ContainerHandler, GridMath, Move, CustomFormationPreset.</div>
+      <div class="ns-card-count">11 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-core)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-core)"></span>Machina.Core</div>
+      <div class="ns-card-folder">_Core/</div>
+      <div class="ns-card-desc">Data types: Game, GameDemo, Reward, Price, Milestone, RewardGroup, Attempt, LevelAttempt, ChallengeAttempt, LevelStats, PlayerStats, ChallengeStats, TweenParameters, CameraTweenParams, MaterialSet, MetaMaterials, SceneMaterials, LevelDifficulty.</div>
+      <div class="ns-card-count">~22 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-ui)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-ui)"></span>Machina.UI</div>
+      <div class="ns-card-folder">_UI/ · _DailyStreak/</div>
+      <div class="ns-card-desc">UIController, UIPanel, UIPopup, UIButton hierarchy. All display components, panels, popups, buttons, sliders, leaderboard UI, live-ops UI, tutorial overlay.</div>
+      <div class="ns-card-count">~178 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-events)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-events)"></span>Machina.Events</div>
+      <div class="ns-card-folder">_Events/</div>
+      <div class="ns-card-desc">Live ops event framework: GameFeature, TimedGameFeature, MilestonedGameFeature, Notification. Concrete events: MainLeagueEvent, WinStreakEvent, LavaQuestEvent, MemoryMadnessEvent, PiggyBank.</div>
+      <div class="ns-card-count">~24 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-league)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-league)"></span>Machina.League</div>
+      <div class="ns-card-folder">_League/ · _Leaderboard/</div>
+      <div class="ns-card-desc">Competitive league + leaderboard system: LeagueManager, LeagueInstance, LeagueGroup, LeagueConfig, User, BotProfile, UILeaderboard family.</div>
+      <div class="ns-card-count">~14 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-meta)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-meta)"></span>Machina.Meta</div>
+      <div class="ns-card-folder">_Meta/</div>
+      <div class="ns-card-desc">Meta-map overworld system: MetaController, MetaInputHandler, Area, Node, MetaData, MetaTutorialEvents.</div>
+      <div class="ns-card-count">~8 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-ads)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-ads)"></span>Machina.Ads</div>
+      <div class="ns-card-folder">_Ads/</div>
+      <div class="ns-card-desc">Ad system adapters: InterstitialAds, RewardedAds, BannerAds, InterPlacement, RvPlacement.</div>
+      <div class="ns-card-count">6 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-analytics)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-analytics)"></span>Machina.Analytics</div>
+      <div class="ns-card-folder">_Analytics/</div>
+      <div class="ns-card-desc">Analytics pipeline: MissionEventData, BalancySmartObjectEvents. Used by AnalyticsManager.</div>
+      <div class="ns-card-count">2 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-adapters)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-adapters)"></span>Machina.Adapters</div>
+      <div class="ns-card-folder">_Adapters/</div>
+      <div class="ns-card-desc">SDK bridges: RewardAdapter, InventoryAdapter, BalancyRemoteConfigProvider, BalancyProfileDataProvider, IAPAdapter, EventAdapterOverride, EconomyPromotion.</div>
+      <div class="ns-card-count">7 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-utils)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-utils)"></span>Machina.Utils</div>
+      <div class="ns-card-folder">_Utils/</div>
+      <div class="ns-card-desc">Utilities: DistributionUtils, Animate, KeyboardShortcuts, LevelDataCustomizer. Logger stays in root Machina namespace.</div>
+      <div class="ns-card-count">~5 files</div>
+    </div>
+  </div>
+</section>
 
-// --- Collapsible Sections ---
-function toggleSection(id) {
-  document.getElementById(id).classList.toggle('collapsed');
-}
+<!-- ═══════════════════════ HIERARCHY ═══════════════════════ -->
+<section id="hierarchy">
+  <div class="section-title"><span class="section-icon">🌲</span> Class Hierarchies</div>
+
+  <div class="hierarchy-grid">
+
+    <!-- Controller hierarchy -->
+    <div class="hier-box">
+      <div class="hier-header" style="border-left: 3px solid var(--ns-machina)">
+        Controller System &nbsp;<span class="pill pill-abstract">Machina</span>
+      </div>
+      <div class="hier-body">
+        <div class="hier-tree">
+          <div><span class="root">MonoBehaviour</span></div>
+          <div class="indent1">└ <span class="abstract">Singleton&lt;T&gt;</span></div>
+          <div class="indent2">└ <span class="abstract">Controller&lt;T&gt;</span></div>
+          <div class="indent3">└ <span class="abstract">GameController&lt;T&gt;</span> <span class="note">← abstract level base</span></div>
+          <div class="indent3 indent1">├ <span class="concrete">LevelController</span> <span class="note">← USE in scenes</span></div>
+          <div class="indent3 indent1">└ <span class="abstract">MetaController</span></div>
+          <br>
+          <div class="indent2">└ <span class="concrete">CameraController</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game hierarchy -->
+    <div class="hier-box">
+      <div class="hier-header" style="border-left: 3px solid var(--ns-core)">
+        Core.Game System &nbsp;<span class="pill pill-abstract">Machina.Core</span>
+      </div>
+      <div class="hier-body">
+        <div class="hier-tree">
+          <div><span class="root">MonoBehaviour</span></div>
+          <div class="indent1">└ <span class="abstract">Game</span> <span class="note">← abstract playable game</span></div>
+          <div class="indent2">└ <span class="concrete">GameDemo</span> <span class="note">← blank template stub</span></div>
+          <br>
+          <div class="note indent1">Game declares:</div>
+          <div class="note indent2">SpawnCompleteEvent, WonEvent, FailEvent</div>
+          <div class="note indent2">LastChanceEvent, MoveMadeEvent</div>
+          <div class="note indent2">LevelStateChangedEvent</div>
+          <div class="note indent2">Init(), Spawn(), DestroyGame()</div>
+          <div class="note indent2">CheckGameFail(), CheckGameWin()</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gameplay items hierarchy -->
+    <div class="hier-box">
+      <div class="hier-header" style="border-left: 3px solid var(--ns-gameplay)">
+        Gameplay Entities &nbsp;<span class="pill pill-abstract">Machina.Gameplay</span>
+      </div>
+      <div class="hier-body">
+        <div class="hier-tree">
+          <div><span class="root">MonoBehaviour</span></div>
+          <div class="indent1">├ <span class="abstract">Item</span> <span class="note">← any interactive entity</span></div>
+          <div class="indent2 note">IClickable, IPoolable</div>
+          <div class="indent1">├ <span class="abstract">ItemContainer</span> <span class="note">← deck-like stack</span></div>
+          <div class="indent2 note">IClickable · holds List&lt;Item&gt;</div>
+          <div class="indent1">├ <span class="abstract">CollectionPoint</span> <span class="note">← bus-like target</span></div>
+          <div class="indent2 note">capacity + TryCollect()</div>
+          <div class="indent1">├ <span class="abstract">StorageTray</span> <span class="note">← overflow bin</span></div>
+          <div class="indent2 note">FreeSpace + CheckLoseCondition()</div>
+          <div class="indent1">├ <span class="abstract">InputHandler</span> <span class="note">← raycast input</span></div>
+          <div class="indent1">├ <span class="abstract">MovementHandler</span> <span class="note">← undo cache</span></div>
+          <div class="indent1">├ <span class="abstract">ContainerSpawner</span> <span class="note">← grid occupancy</span></div>
+          <div class="indent1">└ <span class="abstract">ContainerHandler</span> <span class="note">← grid orchestrator</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manager hierarchy -->
+    <div class="hier-box">
+      <div class="hier-header" style="border-left: 3px solid var(--ns-machina)">
+        Manager Pattern &nbsp;<span class="pill pill-singleton">Machina</span>
+      </div>
+      <div class="hier-body">
+        <div class="hier-tree">
+          <div><span class="root">MonoBehaviour</span></div>
+          <div class="indent1">└ <span class="abstract">Singleton&lt;T&gt;</span></div>
+          <div class="indent2">└ <span class="abstract">Manager&lt;T&gt;</span></div>
+          <div class="indent3">├ <span class="concrete">GameManager</span></div>
+          <div class="indent3">├ <span class="concrete">EconomyManager</span></div>
+          <div class="indent3">├ <span class="concrete">LifeManager</span></div>
+          <div class="indent3">├ <span class="concrete">AdManager</span></div>
+          <div class="indent3">├ <span class="concrete">AnalyticsManager</span></div>
+          <div class="indent3">├ <span class="concrete">EventsManager</span></div>
+          <div class="indent3">├ <span class="concrete">LeagueManager</span></div>
+          <div class="indent3">├ <span class="concrete">MetaManager</span></div>
+          <div class="indent3">├ <span class="concrete">PoolManager</span></div>
+          <div class="indent3">└ <span class="note">… 10 more managers</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UI hierarchy -->
+    <div class="hier-box">
+      <div class="hier-header" style="border-left: 3px solid var(--ns-ui)">
+        UI System &nbsp;<span class="pill pill-abstract">Machina.UI</span>
+      </div>
+      <div class="hier-body">
+        <div class="hier-tree">
+          <div><span class="root">MonoBehaviour</span></div>
+          <div class="indent1">├ <span class="abstract">UIPanel</span></div>
+          <div class="indent2">├ <span class="concrete">UIPanelGame</span></div>
+          <div class="indent2">├ <span class="concrete">UIPanelLobby</span></div>
+          <div class="indent2">├ <span class="concrete">UIPanelWin</span> / <span class="concrete">UIPanelLose</span></div>
+          <div class="indent2">├ <span class="concrete">UIPanelMeta</span></div>
+          <div class="indent2">└ <span class="note">… 8 more panels</span></div>
+          <div class="indent1">├ <span class="abstract">UIPopup</span></div>
+          <div class="indent2">├ <span class="concrete">UIPopupRevive</span></div>
+          <div class="indent2">├ <span class="concrete">UIPopupLeague</span></div>
+          <div class="indent2">└ <span class="note">… 27 more popups</span></div>
+          <div class="indent1">└ <span class="abstract">UIButton</span></div>
+          <div class="indent2">├ <span class="concrete">UIButtonPlay</span></div>
+          <div class="indent2">├ <span class="concrete">UIButtonRV</span></div>
+          <div class="indent2">└ <span class="note">… 24 more buttons</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events hierarchy -->
+    <div class="hier-box">
+      <div class="hier-header" style="border-left: 3px solid var(--ns-events)">
+        Live Ops Events &nbsp;<span class="pill pill-abstract">Machina.Events</span>
+      </div>
+      <div class="hier-body">
+        <div class="hier-tree">
+          <div><span class="root">ScriptableObject</span></div>
+          <div class="indent1">└ <span class="abstract">GameFeature</span></div>
+          <div class="indent2">├ <span class="abstract">TimedGameFeature</span></div>
+          <div class="indent3">├ <span class="concrete">MainLeagueEvent</span></div>
+          <div class="indent3">├ <span class="concrete">WinStreakEvent</span></div>
+          <div class="indent3">└ <span class="concrete">LavaQuestEvent</span></div>
+          <div class="indent2">└ <span class="abstract">MilestonedGameFeature</span></div>
+          <div class="indent3">├ <span class="concrete">MemoryMadnessEvent</span></div>
+          <div class="indent3">└ <span class="concrete">PiggyBank</span></div>
+          <br>
+          <div class="indent1">└ <span class="concrete">Notification</span> <span class="note">← push/local notif</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ LEVEL STATE MACHINE ═══════════════════════ -->
+<section>
+  <div class="section-title"><span class="section-icon">⚡</span> LevelState Machine</div>
+  <div class="callout">
+    <strong>GameController&lt;T&gt;</strong> owns the state machine. Every transition: <code>SetState() → ValidateState() → HandleState() → LevelStateChangedEvent.Invoke()</code>
+  </div>
+  <div class="state-flow">
+    <div class="state-node start">None</div>
+    <div class="state-arrow">→</div>
+    <div class="state-node">Intro</div>
+    <div class="state-arrow">→</div>
+    <div class="state-node">Playing</div>
+    <div class="state-arrow">→</div>
+    <div class="state-node start">Won</div>
+    <div class="state-arrow">→</div>
+    <div class="state-node end">Ended</div>
+  </div>
+  <div class="state-flow" style="margin-top:8px">
+    <div class="state-node">Playing</div>
+    <div class="state-arrow">→</div>
+    <div class="state-node special">LastChance</div>
+    <div class="state-arrow">→</div>
+    <div class="state-node">Playing</div>
+    <span style="color:var(--text-muted); font-size:12px; margin: 0 8px">(revived)</span>
+    <div class="state-arrow">→</div>
+    <div class="state-node end">Failed</div>
+    <div class="state-arrow">→</div>
+    <div class="state-node end">Ended</div>
+  </div>
+  <div class="state-flow" style="margin-top:8px">
+    <div class="state-node">Playing</div>
+    <div class="state-arrow">⇌</div>
+    <div class="state-node special">Paused</div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ MANAGERS ═══════════════════════ -->
+<section id="managers">
+  <div class="section-title"><span class="section-icon">⚙️</span> Managers</div>
+  <div class="callout">
+    All managers inherit <code>Manager&lt;T&gt; → Singleton&lt;T&gt; → MonoBehaviour</code>.
+    <strong>Thread-safe</strong>, <code>DontDestroyOnLoad</code>, <code>[DefaultExecutionOrder(-80)]</code>.
+    Access via <code>ManagerName.Instance</code> or static shortcut properties.
+  </div>
+
+  <div class="table-wrap">
+    <table class="class-table">
+      <thead>
+        <tr>
+          <th>Class</th>
+          <th>Namespace</th>
+          <th>Responsibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">GameManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Central game state machine (Idle/Loading/Playing/Meta). Level progression, win/lose flow. Provides <code>GameManager.Level</code>, <code>ActiveLevelController</code>, <code>IsActiveLevelPlaying</code>.</td></tr>
+        <tr><td class="mono">LifeManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Heart/life system with replenishment timer, max cap, and unlimited-life mode. Fires <code>LifeChangedEvent</code>.</td></tr>
+        <tr><td class="mono">EconomyManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Currency balances, transactions, promotional offers. Wraps Lion SDK inventory.</td></tr>
+        <tr><td class="mono">EventsManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Coordinates all live-ops events: WinStreakEvent, LavaQuestEvent, MemoryMadnessEvent, MainLeagueEvent. Static accessors for each event.</td></tr>
+        <tr><td class="mono">AdManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Orchestrates interstitial, rewarded video, and banner placements via AppLovin MAX.</td></tr>
+        <tr><td class="mono">AnalyticsManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Unified analytics pipeline: Adjust, Firebase, Lion Analytics, Sentry, Balancy.</td></tr>
+        <tr><td class="mono">AssetManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Sprite and material asset loading, caching, and runtime retrieval.</td></tr>
+        <tr><td class="mono">CollectionManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Player collection/inventory items with unlock and progression tracking.</td></tr>
+        <tr><td class="mono">MetaManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Meta-map overworld state, area unlocks, node progression.</td></tr>
+        <tr><td class="mono">LeagueManager</td><td><span class="ns-tag">Machina.League</span></td><td class="desc">Creates, loads, and manages all LeagueGroup/LeagueInstance objects. Bot AI and score updates.</td></tr>
+        <tr><td class="mono">PoolManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Generic object pool for any <code>IPoolable</code>. Static <code>Get&lt;T&gt;()</code> / <code>Release&lt;T&gt;()</code> API.</td></tr>
+        <tr><td class="mono">TutorialManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Step-based tutorial flow with gesture overlays and completion tracking.</td></tr>
+        <tr><td class="mono">SoundManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">SFX and music playback with pooling and fade control.</td></tr>
+        <tr><td class="mono">SettingsManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">User settings persistence (sound, haptics, notifications).</td></tr>
+        <tr><td class="mono">NotificationsManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Schedules and cancels local push notifications.</td></tr>
+        <tr><td class="mono">QualityManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Detects device GPU tier and applies appropriate quality settings.</td></tr>
+        <tr><td class="mono">PowerUpManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Power-up inventory, selection, activation, and effect coordination.</td></tr>
+        <tr><td class="mono">LiveOpsManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Top-level live ops feature gating and scheduling coordinator.</td></tr>
+        <tr><td class="mono">IncomeMultipliers</td><td><span class="ns-tag">Machina</span></td><td class="desc">Reward multiplier stack: Magnet, Hammer, Return, SkipBus, WinStreak, PiggyBank, Gem, Memory, X2/X3.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════ GAMEPLAY FRAMEWORK ═══════════════════════ -->
+<section id="gameplay">
+  <div class="section-title"><span class="section-icon">🎮</span> Gameplay Framework (Machina.Gameplay)</div>
+
+  <div class="callout">
+    Reusable abstract building-blocks for any <strong>container-sorting puzzle game</strong>.
+    Implement the abstract methods in your game-specific subclasses. All in <code>Assets/Scripts/Machina/_Gameplay/</code>.
+  </div>
+
+  <div class="table-wrap">
+    <table class="class-table">
+      <thead>
+        <tr><th>Class</th><th>Type</th><th>Responsibility &amp; Key Members</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono">Item</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Any discrete interactive entity (card, token, piece). State machine, IClickable, IPoolable. Tracks container refs (container, collectionPoint, storageTray). Override: <code>Click()</code>, <code>OnPoolSpawn()</code>, <code>StateChanged()</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">ItemContainer</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Stack/deck that holds Items. Owns GridCoordinate. Manages <code>List&lt;Item&gt; items</code>, selectable-top logic. Override: <code>Click()</code>, <code>DestroySelf(bool)</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">CollectionPoint</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Bus-like collection target with capacity and state machine. Override: <code>TryCollect()</code>, <code>Capacity</code>, <code>DestroySelf()</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">StorageTray</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Overflow receptacle. Tracks <code>FreeSpace</code>, fires <code>CapacityChangedEvent</code>. Override: <code>CheckLoseCondition()</code>, <code>DestroySelf()</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">InputHandler</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Raycast-driven input with <code>AnyTapEvent</code>. <code>ToggleInput(bool)</code> for enable/disable. Override: <code>DetectInput()</code>, <code>DeselectItems()</code>, <code>TryGetRaycastHit()</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">MovementHandler</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Undo cache stack (<code>Stack&lt;Move&gt; moveCache</code>). 3 abstract <code>MoveItems()</code> overloads for Item→Container, Item→StorageTray, Item→CollectionPoint.</td>
+        </tr>
+        <tr>
+          <td class="mono">ContainerSpawner</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Grid occupancy tracking, world position calculation, new-slot search. Override: <code>SpawnContainer(Vector2Int, Vector3)</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">ContainerHandler</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Grid query API: <code>EffectiveColCount</code>, <code>EffectiveRowCount</code>, container lookup. Override: <code>SpawnContainers(int, Action)</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">GridMath</td>
+          <td><span class="pill pill-enum">static</span></td>
+          <td class="desc">Stateless grid utilities: <code>ComputeGridDimensions()</code>, <code>ComputeWorldPosition()</code>, <code>GetBaseGridCoordinates()</code>, <code>GetExtraGridCoordinates()</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">Move</td>
+          <td><span class="pill pill-enum">record</span></td>
+          <td class="desc">Concrete undo record: <code>List&lt;Item&gt; Items</code>, <code>ItemContainer FromContainer</code>, <code>Vector2Int FromContainerCoordinate</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">CustomFormationPreset</td>
+          <td><span class="pill pill-so">ScriptableObject</span></td>
+          <td class="desc">Grid cell matrix for custom container formation layouts. Odin-powered editor with toggleable cell matrix. <code>GetActiveCoordinates()</code> → <code>List&lt;Vector2Int&gt;</code>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════ UI SYSTEM ═══════════════════════ -->
+<section id="ui">
+  <div class="section-title"><span class="section-icon">🖼</span> UI System (Machina.UI)</div>
+
+  <div class="callout">
+    <strong>UIController</strong> orchestrates all panels and popups. Use <code>content</code> GameObject for show/hide.
+    All UI lives in <code>Assets/Scripts/Machina/_UI/</code>.
+  </div>
+
+  <div class="two-col">
+    <div class="table-wrap">
+      <table class="class-table">
+        <thead><tr><th>UIPanel Subclasses</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">UIPanelGame</td><td class="desc">In-game HUD and gameplay UI</td></tr>
+          <tr><td class="mono">UIPanelLobby</td><td class="desc">Main menu / lobby screen</td></tr>
+          <tr><td class="mono">UIPanelWin</td><td class="desc">Level win celebration</td></tr>
+          <tr><td class="mono">UIPanelLose</td><td class="desc">Level fail screen</td></tr>
+          <tr><td class="mono">UIPanelLoading</td><td class="desc">Loading/transition screen</td></tr>
+          <tr><td class="mono">UIPanelMeta</td><td class="desc">Meta-map overworld panel</td></tr>
+          <tr><td class="mono">UIPanelChallenge</td><td class="desc">Challenge mode HUD</td></tr>
+          <tr><td class="mono">UIPanelRewards</td><td class="desc">Reward display panel</td></tr>
+          <tr><td class="mono">UIPanelAdBreak</td><td class="desc">Ad break interstitial panel</td></tr>
+          <tr><td class="mono">UIPanelStoreConnection</td><td class="desc">Store connectivity panel</td></tr>
+          <tr><td class="mono">UIPanelRewardsChest</td><td class="desc">Chest opening animation panel</td></tr>
+          <tr><td class="mono">UIScreenEdgeEffect</td><td class="desc">Edge glow/blur visual effect</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-wrap">
+      <table class="class-table">
+        <thead><tr><th>Notable UIPopup Subclasses</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">UIPopupRevive</td><td class="desc">Revive offer (paid or RV)</td></tr>
+          <tr><td class="mono">UIPopupLeague</td><td class="desc">League standing and rewards</td></tr>
+          <tr><td class="mono">UIPopupWinStreak</td><td class="desc">Win streak bonus display</td></tr>
+          <tr><td class="mono">UIPopupLevelFail</td><td class="desc">Level fail + retry options</td></tr>
+          <tr><td class="mono">UIPopupShop</td><td class="desc">In-game shop</td></tr>
+          <tr><td class="mono">UIPopupSettings</td><td class="desc">Sound/haptics settings</td></tr>
+          <tr><td class="mono">UIPopupChallenges</td><td class="desc">Challenge list browser</td></tr>
+          <tr><td class="mono">UIPopupLuckySpin</td><td class="desc">Lucky spin reward popup</td></tr>
+          <tr><td class="mono">UIPopupLavaQuest</td><td class="desc">Lava Quest event popup</td></tr>
+          <tr><td class="mono">UIPopupMatchMadness</td><td class="desc">Memory card matching event</td></tr>
+          <tr><td class="mono">UIPopupPiggyBank</td><td class="desc">Piggy bank collect popup</td></tr>
+          <tr><td class="mono">UIPopupAdRemovalOffer</td><td class="desc">Remove-ads purchase offer</td></tr>
+          <tr><td class="mono">UIPopupDailyStreak*</td><td class="desc">Daily streak entry/progress/freeze</td></tr>
+          <tr><td class="mono">UIPopupUserProfile</td><td class="desc">Player profile with avatar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:16px" class="table-wrap">
+    <table class="class-table">
+      <thead><tr><th>Specialized UI Components</th><th>Responsibility</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">UILuckySpin</td><td class="desc">Spinning wheel animation controller</td></tr>
+        <tr><td class="mono">UIStoryHandler</td><td class="desc">Story/narrative carousel with timer bars</td></tr>
+        <tr><td class="mono">HardLevelOverlay</td><td class="desc">DOTween hard-level indicator with difficulty sprites</td></tr>
+        <tr><td class="mono">UILavaQuestStage</td><td class="desc">Geometric spawn positions for stage avatars</td></tr>
+        <tr><td class="mono">UIBattlePassLevelDriver</td><td class="desc">Battle pass level progression binding</td></tr>
+        <tr><td class="mono">UIPopupLeaguePromotionPage</td><td class="desc">League promotion/demotion animation</td></tr>
+        <tr><td class="mono">UIItemStreakStep</td><td class="desc">Win streak milestone step display</td></tr>
+        <tr><td class="mono">UIButtonRVDailyLimitView</td><td class="desc">Rewarded video daily limit counter (e.g. "Daily 2/5")</td></tr>
+        <tr><td class="mono">UIButtonCloseLiveOpsPopup</td><td class="desc">Generic close button for live ops offer popups</td></tr>
+        <tr><td class="mono">CanvasRedrawTrigger</td><td class="desc">Forces canvas rebuild on enable; corrects sorting order</td></tr>
+        <tr><td class="mono">UILeaderboard</td><td class="desc">Full leaderboard display with podium and rank rows</td></tr>
+        <tr><td class="mono">UIRewardController</td><td class="desc">Animates reward items with DOTween sequences</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════ LIVE OPS ═══════════════════════ -->
+<section id="events">
+  <div class="section-title"><span class="section-icon">🔥</span> Live Ops Events (Machina.Events)</div>
+
+  <div class="callout">
+    All live ops events inherit from <code>GameFeature</code> ScriptableObject. Registered in <strong>EventsManager</strong> via serialized fields.
+    Concrete events are accessed via static properties: <code>EventsManager.WinStreakEvent</code>, <code>EventsManager.LavaQuestEvent</code>, etc.
+  </div>
+
+  <div class="table-wrap">
+    <table class="class-table">
+      <thead><tr><th>Class</th><th>Base</th><th>Key Behaviour</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="mono">GameFeature</td>
+          <td><span class="pill pill-abstract">abstract ScriptableObject</span></td>
+          <td class="desc">Base for all features. Progress tracking, UI integration, <code>IsRunning</code>, <code>IsVisible</code>, <code>IsInteractable</code>. Override <code>GetFeatureKey()</code>, <code>GetUnnyId()</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">TimedGameFeature</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Adds countdown timer, start/end lifecycle hooks, <code>OnEventStarted()</code>, <code>OnEventEnded()</code>, stats persistence via ES3.</td>
+        </tr>
+        <tr>
+          <td class="mono">MilestonedGameFeature</td>
+          <td><span class="pill pill-abstract">abstract</span></td>
+          <td class="desc">Adds milestone list, claim logic, <code>GetCurrentMilestone()</code>, progress display.</td>
+        </tr>
+        <tr>
+          <td class="mono">MainLeagueEvent</td>
+          <td>TimedGameFeature</td>
+          <td class="desc">Competitive league season. Creates/ends LeagueGroup via LeagueManager. Increments score on level win. Exposes <code>GetCurrentLeagueIcon()</code>, <code>GetPlayerRank()</code>.</td>
+        </tr>
+        <tr>
+          <td class="mono">WinStreakEvent</td>
+          <td>TimedGameFeature</td>
+          <td class="desc">Win streak multiplier bonus. Tracks consecutive wins, bonus multipliers with league bonus dict.</td>
+        </tr>
+        <tr>
+          <td class="mono">LavaQuestEvent</td>
+          <td>TimedGameFeature</td>
+          <td class="desc">Photo-map progression event with stage unlocking, avatar placement, and visual rewards.</td>
+        </tr>
+        <tr>
+          <td class="mono">MemoryMadnessEvent</td>
+          <td>MilestonedGameFeature</td>
+          <td class="desc">Memory card match mini-game embedded as a live op. Spawns MemoryCard grid, tracks match progress, milestone rewards.</td>
+        </tr>
+        <tr>
+          <td class="mono">PiggyBank</td>
+          <td>MilestonedGameFeature</td>
+          <td class="desc">Accumulating piggy bank. Fills from gameplay earnings; offers collect via IAP or RV.</td>
+        </tr>
+        <tr>
+          <td class="mono">Notification</td>
+          <td>ScriptableObject</td>
+          <td class="desc">Local/push notification definition: title, body, schedule delay. Used by NotificationsManager.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PATTERNS ═══════════════════════ -->
+<section id="patterns">
+  <div class="section-title"><span class="section-icon">📐</span> Key Patterns & Conventions</div>
+
+  <div class="two-col">
+    <div>
+      <div class="hier-box" style="margin-bottom:16px">
+        <div class="hier-header">Singleton Manager</div>
+        <div class="hier-body">
+          <div class="code-block"><span class="attr">[DefaultExecutionOrder(-80)]</span>
+<span class="kw">public class</span> <span class="type">GameManager</span> : <span class="type">Manager&lt;GameManager&gt;</span>
+{
+    <span class="kw">protected override void</span> OnAwake() { }
+    <span class="kw">protected override void</span> AddListeners() { }
+    <span class="kw">protected override void</span> OnDestroyCallback() { }
+}</div>
+        </div>
+      </div>
+
+      <div class="hier-box" style="margin-bottom:16px">
+        <div class="hier-header">Static UnityEvent</div>
+        <div class="hier-body">
+          <div class="code-block"><span class="attr">[Serializable]</span>
+<span class="kw">public class</span> <span class="type">GameStateEvent</span>
+    : <span class="type">UnityEvent&lt;GameState&gt;</span> { }
+
+<span class="kw">public static</span> <span class="type">GameStateEvent</span> GameStateChangedEvent
+    = <span class="kw">new</span> <span class="type">GameStateEvent</span>();</div>
+        </div>
+      </div>
+
+      <div class="hier-box">
+        <div class="hier-header">Typed Game Cast</div>
+        <div class="hier-body">
+          <div class="code-block"><span class="cm">// In a GameController&lt;T&gt; subclass:</span>
+<span class="kw">private</span> <span class="type">GameSortDash</span> SortieGame
+    =&gt; game <span class="kw">as</span> <span class="type">GameSortDash</span>;
+
+<span class="kw">public static</span> <span class="type">GameSortDash</span> Game
+    =&gt; Instance?.SortieGame;</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hier-box" style="margin-bottom:16px">
+        <div class="hier-header">Serialized Properties</div>
+        <div class="hier-body">
+          <div class="code-block"><span class="cm">// Non-serialized state</span>
+<span class="kw">public</span> <span class="type">LevelState</span> State { <span class="kw">get</span>; <span class="kw">private set</span>; }
+
+<span class="cm">// Serialized with read-only public access</span>
+<span class="attr">[SerializeField]</span> <span class="kw">private</span> <span class="type">int</span> lives;
+<span class="kw">public</span> <span class="type">int</span> Lives =&gt; lives;</div>
+        </div>
+      </div>
+
+      <div class="hier-box" style="margin-bottom:16px">
+        <div class="hier-header">Logging</div>
+        <div class="hier-body">
+          <div class="code-block"><span class="type">Machina</span>.Logger.Log(<span class="str">"message"</span>, <span class="kw">this</span>);
+<span class="type">Machina</span>.Logger.LogWarning(<span class="str">"warn"</span>, <span class="kw">this</span>);
+<span class="type">Machina</span>.Logger.LogError(<span class="str">"error"</span>, <span class="kw">this</span>);</div>
+        </div>
+      </div>
+
+      <div class="hier-box">
+        <div class="hier-header">Object Pooling</div>
+        <div class="hier-body">
+          <div class="code-block"><span class="cm">// Implement IPoolable on your MonoBehaviour:</span>
+<span class="kw">public void</span> OnPoolSpawn() { }
+<span class="kw">public void</span> OnPoolDespawn() { }
+
+<span class="cm">// Get and release via PoolManager:</span>
+<span class="type">PoolManager</span>.Get&lt;<span class="type">MyItem</span>&gt;();
+<span class="type">PoolManager</span>.Release&lt;<span class="type">MyItem</span>&gt;(item);</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px" class="table-wrap">
+    <table class="class-table">
+      <thead><tr><th>Convention</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Braces</strong></td><td class="desc">Allman style — opening brace always on new line. Required for ALL control flow bodies, no exceptions.</td></tr>
+        <tr><td><strong>No var</strong></td><td class="desc">Always explicit types: <code class="mono">List&lt;Card&gt; list = new List&lt;Card&gt;();</code></td></tr>
+        <tr><td><strong>Unity null</strong></td><td class="desc">Always <code class="mono">== null</code> / <code class="mono">!= null</code>. Never <code class="mono">is null</code> / <code class="mono">is not null</code> (bypasses Unity equality).</td></tr>
+        <tr><td><strong>Regions</strong></td><td class="desc">Every class: FIELDS AND PROPERTIES → EVENTS → PUBLIC API → PRIVATE</td></tr>
+        <tr><td><strong>Naming</strong></td><td class="desc">Classes/Methods/Properties: PascalCase. Private fields: camelCase (no underscore). Constants: SCREAMING_SNAKE_CASE.</td></tr>
+        <tr><td><strong>UI prefix</strong></td><td class="desc">All UI classes start with lowercase <code>u</code> prefix after the <code>UI</code> prefix (e.g., <code>UIPanel</code>, <code>uiPanel</code> for private refs).</td></tr>
+        <tr><td><strong>Early returns</strong></td><td class="desc">Prefer guard clauses over deep nesting.</td></tr>
+        <tr><td><strong>No hot-path LINQ</strong></td><td class="desc">LINQ only if it doesn't allocate in Update/FixedUpdate loops.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SAVE / LOAD ═══════════════════════ -->
+<section>
+  <div class="section-title"><span class="section-icon">💾</span> Save / Load Vocabulary (Machina.Core)</div>
+
+  <div class="table-wrap">
+    <table class="class-table">
+      <thead><tr><th>Type</th><th>Maps to</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">LevelData</td><td>—</td><td class="desc">Grid dimensions + list of ContainerData</td></tr>
+        <tr><td class="mono">ContainerData</td><td>ItemContainer</td><td class="desc">Saved position, modifier (as int), grid coord, list of ItemData</td></tr>
+        <tr><td class="mono">ItemData</td><td>Item</td><td class="desc"><code>ItemName</code> string + collection type; reflection-backed construction</td></tr>
+        <tr><td class="mono">IItemProperty</td><td>—</td><td class="desc">Interface: <code>string ItemName { get; }</code> — implemented by game-specific item properties</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SDK INTEGRATIONS ═══════════════════════ -->
+<section>
+  <div class="section-title"><span class="section-icon">🔌</span> SDK Integrations</div>
+
+  <div class="table-wrap">
+    <table class="class-table">
+      <thead><tr><th>Category</th><th>SDK</th><th>Do Not Touch</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Ads</strong></td><td class="desc">AppLovin MAX (mediation), Amazon APS</td><td class="mono">Assets/MaxSdk/ · Assets/Amazon/</td></tr>
+        <tr><td><strong>Analytics</strong></td><td class="desc">Adjust, Firebase Analytics, Lion Analytics, Sentry</td><td class="mono">Assets/LionStudios/</td></tr>
+        <tr><td><strong>Remote Config</strong></td><td class="desc">Firebase Remote Config, Balancy</td><td class="mono">Assets/Plugins/Balancy/</td></tr>
+        <tr><td><strong>A/B Testing</strong></td><td class="desc">GrowthBook</td><td>—</td></tr>
+        <tr><td><strong>IAP</strong></td><td class="desc">Unity Purchasing</td><td>—</td></tr>
+        <tr><td><strong>Persistence</strong></td><td class="desc">Easy Save 3 (ES3)</td><td>—</td></tr>
+        <tr><td><strong>Animation</strong></td><td class="desc">DOTween</td><td>—</td></tr>
+        <tr><td><strong>UI Text</strong></td><td class="desc">TextMeshPro</td><td>—</td></tr>
+        <tr><td><strong>Social</strong></td><td class="desc">Facebook/Meta SDK</td><td class="mono">Assets/FacebookSDK/ · Assets/Meta/</td></tr>
+        <tr><td><strong>Publisher</strong></td><td class="desc">Lion Studios SDK v1.20.1</td><td class="mono">Assets/LionStudios/</td></tr>
+        <tr><td><strong>Inspector</strong></td><td class="desc">Odin Inspector (Sirenix)</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════ DEPENDENCIES ═══════════════════════ -->
+<style>
+  .dep-wrap {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 600px;
+  }
+  #dep-graph { width: 100%; height: 100%; cursor: grab; display: block; }
+  #dep-graph:active { cursor: grabbing; }
+  .dep-tooltip {
+    position: absolute;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 15px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+    max-width: 240px;
+    z-index: 20;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.55);
+  }
+  .dep-tooltip .tt-name  { font-family: monospace; font-weight: 700; margin-bottom: 4px; }
+  .dep-tooltip .tt-folder{ font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+  .dep-tooltip .tt-desc  { color: var(--text-dim); line-height: 1.5; }
+  .dep-tooltip .tt-rel   { margin-top: 8px; font-size: 11px; color: var(--text-muted); }
+  .dep-tooltip .tt-rel span { display: block; color: var(--text-dim); }
+  .dep-controls {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .dep-legend { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+  .dep-legend-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--text-dim);
+    cursor: pointer; padding: 3px 8px;
+    border-radius: 4px; border: 1px solid transparent;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .dep-legend-item:hover { background: var(--surface2); border-color: var(--border); }
+  .dep-legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .dep-buttons { display: flex; gap: 8px; }
+  .dep-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text-dim); font-size: 12px;
+    padding: 5px 12px; border-radius: 6px; cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+    font-family: inherit;
+  }
+  .dep-btn:hover { color: var(--text); border-color: var(--accent); }
+  .dep-hint { font-size: 11px; color: var(--text-muted); margin-top: 8px; text-align: center; }
+</style>
+
+<section id="dependencies">
+  <div class="section-title"><span class="section-icon">⬡</span> Namespace Dependency Graph</div>
+
+  <div class="callout">
+    <strong>How to read:</strong> Arrows point <em>from</em> a namespace <em>to</em> its dependency
+    (A → B means A uses types from B). <strong>Click</strong> a node or legend item to highlight its connections.
+    <strong>Drag</strong> nodes to reposition. <strong>Scroll</strong> or pinch to zoom.
+  </div>
+
+  <div class="dep-controls">
+    <div class="dep-legend" id="dep-legend"></div>
+    <div class="dep-buttons">
+      <button class="dep-btn" id="dep-reset-zoom">Reset Zoom</button>
+      <button class="dep-btn" id="dep-reset-layout">Restart Layout</button>
+    </div>
+  </div>
+
+  <div class="dep-wrap">
+    <svg id="dep-graph"></svg>
+    <div id="dep-tooltip" class="dep-tooltip"></div>
+  </div>
+
+  <div class="dep-hint">Click a node to highlight its connections &nbsp;·&nbsp; Drag to reposition &nbsp;·&nbsp; Scroll to zoom</div>
+</section>
+
+</div><!-- /container -->
+</div><!-- /page -->
+
+<footer>
+  Machina Core Framework · MachinaGames · Unity 2022.3.62f1 LTS · Generated 2026-03-27
+</footer>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(function () {
+  // ── Data ────────────────────────────────────────────────────────────────────
+  var NS = [
+    { id: "Machina",           short: "Root",       color: "#58a6ff", folder: "_Managers/ · _Controllers/ · _Interfaces/ · _Keys/",
+      desc: "Core singleton managers, controllers, interface contracts, config key constants. Logger and GameObjectToggler live here.", files: "~25" },
+    { id: "Machina.Core",      short: "Core",        color: "#ffa657", folder: "_Core/",
+      desc: "Game, GameDemo, Reward, Price, Milestone, Attempt, LevelAttempt, PlayerStats, LevelStats, MaterialSet, MetaMaterials, SceneMaterials, TweenParameters.", files: "~22" },
+    { id: "Machina.Gameplay",  short: "Gameplay",    color: "#3fb950", folder: "_Gameplay/",
+      desc: "Item, ItemContainer, CollectionPoint, StorageTray, InputHandler, MovementHandler, ContainerSpawner, ContainerHandler, GridMath, Move, CustomFormationPreset.", files: "11" },
+    { id: "Machina.UI",        short: "UI",          color: "#bc8cff", folder: "_UI/ · _DailyStreak/",
+      desc: "UIController, UIPanel, UIPopup, UIButton hierarchy. All display components, panels, popups, buttons, leaderboard UI, live-ops UI, tutorial overlay.", files: "~178" },
+    { id: "Machina.Events",    short: "Events",      color: "#ff7b72", folder: "_Events/",
+      desc: "GameFeature, TimedGameFeature, MilestonedGameFeature, Notification. Concrete: MainLeagueEvent, WinStreakEvent, LavaQuestEvent, MemoryMadnessEvent, PiggyBank.", files: "~24" },
+    { id: "Machina.League",    short: "League",      color: "#d2a8ff", folder: "_League/ · _Leaderboard/",
+      desc: "LeagueManager, LeagueInstance, LeagueGroup, LeagueConfig, User, BotProfile, UILeaderboard family.", files: "~14" },
+    { id: "Machina.Meta",      short: "Meta",        color: "#56d364", folder: "_Meta/",
+      desc: "MetaController, MetaInputHandler, Area, Node, MetaData, MetaTutorialEvents.", files: "~8" },
+    { id: "Machina.Ads",       short: "Ads",         color: "#f78166", folder: "_Ads/",
+      desc: "InterstitialAds, RewardedAds, BannerAds, InterPlacement, RvPlacement.", files: "6" },
+    { id: "Machina.Analytics", short: "Analytics",   color: "#79c0ff", folder: "_Analytics/",
+      desc: "MissionEventData, BalancySmartObjectEvents. Used by AnalyticsManager.", files: "2" },
+    { id: "Machina.Adapters",  short: "Adapters",    color: "#e3b341", folder: "_Adapters/",
+      desc: "SDK bridges: RewardAdapter, InventoryAdapter, BalancyRemoteConfigProvider, BalancyProfileDataProvider, IAPAdapter, EventAdapterOverride, EconomyPromotion.", files: "7" },
+    { id: "Machina.Utils",     short: "Utils",       color: "#8b949e", folder: "_Utils/",
+      desc: "DistributionUtils, Animate, KeyboardShortcuts, LevelDataCustomizer. Logger stays in root Machina namespace.", files: "~5" },
+  ];
+
+  // source depends on / uses types from target
+  var DEPS = [
+    { source: "Machina.Core",      target: "Machina" },
+    { source: "Machina.Gameplay",  target: "Machina" },
+    { source: "Machina.Gameplay",  target: "Machina.Core" },
+    { source: "Machina.UI",        target: "Machina" },
+    { source: "Machina.UI",        target: "Machina.Core" },
+    { source: "Machina.UI",        target: "Machina.Events" },
+    { source: "Machina.UI",        target: "Machina.League" },
+    { source: "Machina.UI",        target: "Machina.Meta" },
+    { source: "Machina.UI",        target: "Machina.Ads" },
+    { source: "Machina.Ads",       target: "Machina" },
+    { source: "Machina.Analytics", target: "Machina" },
+    { source: "Machina.Analytics", target: "Machina.Adapters" },
+    { source: "Machina.Events",    target: "Machina" },
+    { source: "Machina.Events",    target: "Machina.Core" },
+    { source: "Machina.Events",    target: "Machina.League" },
+    { source: "Machina.League",    target: "Machina" },
+    { source: "Machina.League",    target: "Machina.Core" },
+    { source: "Machina.Meta",      target: "Machina" },
+    { source: "Machina.Meta",      target: "Machina.Core" },
+    { source: "Machina.Adapters",  target: "Machina" },
+    { source: "Machina.Adapters",  target: "Machina.Core" },
+    { source: "Machina.Utils",     target: "Machina" },
+  ];
+
+  // ── Setup ────────────────────────────────────────────────────────────────────
+  var wrap   = document.getElementById("dep-graph").parentElement;
+  var W      = Math.max(wrap.clientWidth || 800, 400);
+  var H      = 600;
+  var NODE_R = 32;
+
+  var svgEl = d3.select("#dep-graph").attr("width", W).attr("height", H);
+  var defs  = svgEl.append("defs");
+
+  // Arrow marker — uses context-stroke so it inherits the line colour
+  defs.append("marker")
+    .attr("id",          "dep-arrow")
+    .attr("viewBox",     "0 -5 10 10")
+    .attr("refX",        10)
+    .attr("refY",        0)
+    .attr("markerWidth", 5)
+    .attr("markerHeight",5)
+    .attr("orient",      "auto-start-reverse")
+    .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .style("fill", "context-stroke");
+
+  // Soft glow filter used on highlighted nodes
+  var filt = defs.append("filter").attr("id", "dep-glow").attr("x", "-40%").attr("y", "-40%").attr("width", "180%").attr("height", "180%");
+  filt.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", "4").attr("result", "blur");
+  filt.append("feMerge").selectAll("feMergeNode")
+    .data(["blur", "SourceGraphic"]).join("feMergeNode").attr("in", function(d){ return d; });
+
+  // Zoom group
+  var g    = svgEl.append("g").attr("class", "dep-zoom-layer");
+  var zoom = d3.zoom().scaleExtent([0.25, 3]).on("zoom", function(ev){ g.attr("transform", ev.transform); });
+  svgEl.call(zoom).on("dblclick.zoom", null);
+
+  // ── Simulation data ──────────────────────────────────────────────────────────
+  var nodes = NS.map(function(d){ return Object.assign({}, d); });
+  var links = DEPS.map(function(d){ return Object.assign({}, d); });
+
+  var simulation = d3.forceSimulation(nodes)
+    .force("link",      d3.forceLink(links).id(function(d){ return d.id; }).distance(170).strength(0.55))
+    .force("charge",    d3.forceManyBody().strength(-620))
+    .force("center",    d3.forceCenter(W / 2, H / 2))
+    .force("collision", d3.forceCollide().radius(NODE_R + 22));
+
+  // ── Links ────────────────────────────────────────────────────────────────────
+  var linkSel = g.append("g").attr("class", "dep-links")
+    .selectAll("line").data(links).join("line")
+      .attr("stroke", function(d){
+        var src = NS.find(function(n){ return n.id === (d.source.id || d.source); });
+        return src ? src.color : "#30363d";
+      })
+      .attr("stroke-opacity", 0.3)
+      .attr("stroke-width",   1.5)
+      .attr("marker-end",     "url(#dep-arrow)");
+
+  // ── Node groups ──────────────────────────────────────────────────────────────
+  var nodeSel = g.append("g").attr("class", "dep-nodes")
+    .selectAll("g").data(nodes).join("g")
+      .style("cursor", "pointer")
+      .call(d3.drag()
+        .on("start", function(ev, d){ if (!ev.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+        .on("drag",  function(ev, d){ d.fx = ev.x; d.fy = ev.y; })
+        .on("end",   function(ev, d){ if (!ev.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+  // Outer glow ring
+  nodeSel.append("circle")
+    .attr("r", NODE_R + 6)
+    .attr("fill",         "none")
+    .attr("stroke",       function(d){ return d.color; })
+    .attr("stroke-width", 1)
+    .attr("opacity",      0.18)
+    .attr("class",        "node-ring");
+
+  // Main filled circle
+  nodeSel.append("circle")
+    .attr("r",            NODE_R)
+    .attr("fill",         function(d){ return d.color + "1a"; })
+    .attr("stroke",       function(d){ return d.color; })
+    .attr("stroke-width", 2)
+    .attr("class",        "node-circle");
+
+  // Short label
+  nodeSel.append("text")
+    .attr("text-anchor",  "middle")
+    .attr("dy",           "0.35em")
+    .attr("font-size",    "11px")
+    .attr("font-weight",  "700")
+    .attr("font-family",  "monospace")
+    .attr("fill",         function(d){ return d.color; })
+    .attr("pointer-events","none")
+    .text(function(d){ return d.short; });
+
+  // File count label below circle
+  nodeSel.append("text")
+    .attr("text-anchor",  "middle")
+    .attr("dy",           NODE_R + 15)
+    .attr("font-size",    "10px")
+    .attr("fill",         "#6e7681")
+    .attr("pointer-events","none")
+    .text(function(d){ return d.files + " files"; });
+
+  // ── Tooltip ──────────────────────────────────────────────────────────────────
+  var tooltip    = document.getElementById("dep-tooltip");
+  var selectedId = null;
+
+  function getLinkedIds(nodeId) {
+    var set = new Set([nodeId]);
+    links.forEach(function(l){
+      var s = l.source.id || l.source;
+      var t = l.target.id || l.target;
+      if (s === nodeId) set.add(t);
+      if (t === nodeId) set.add(s);
+    });
+    return set;
+  }
+
+  function applyHighlight(nodeId) {
+    var connected = getLinkedIds(nodeId);
+    nodeSel
+      .style("opacity", function(d){ return connected.has(d.id) ? 1 : 0.12; })
+      .select(".node-circle").attr("filter", function(d){ return d.id === nodeId ? "url(#dep-glow)" : null; });
+    linkSel.style("opacity", function(l){
+      var s = l.source.id || l.source;
+      var t = l.target.id || l.target;
+      return (s === nodeId || t === nodeId) ? 0.85 : 0.04;
+    });
+  }
+
+  function clearHighlight() {
+    nodeSel.style("opacity", 1).select(".node-circle").attr("filter", null);
+    linkSel.style("opacity", null).attr("stroke-opacity", 0.3);
+  }
+
+  function moveTooltip(ev) {
+    var svgRect = document.getElementById("dep-graph").getBoundingClientRect();
+    var x = ev.clientX - svgRect.left + 18;
+    var y = ev.clientY - svgRect.top  + 18;
+    if (x + 260 > W) { x = x - 280; }
+    if (y + 200 > H) { y = y - 210; }
+    tooltip.style.left = x + "px";
+    tooltip.style.top  = y + "px";
+  }
+
+  nodeSel
+    .on("mouseover", function(ev, d){
+      var deps   = links.filter(function(l){ return (l.source.id||l.source) === d.id; }).map(function(l){ return l.target.id||l.target; });
+      var usedBy = links.filter(function(l){ return (l.target.id||l.target) === d.id; }).map(function(l){ return l.source.id||l.source; });
+      var depsHtml   = deps.length   ? "<div class='tt-rel'>↗ Depends on: " + deps.map(function(x){ return "<span>• "+x+"</span>"; }).join("") + "</div>" : "";
+      var usedByHtml = usedBy.length ? "<div class='tt-rel'>↙ Used by: "    + usedBy.map(function(x){ return "<span>• "+x+"</span>"; }).join("") + "</div>" : "";
+      tooltip.innerHTML = "<div class='tt-name' style='color:"+d.color+"'>"+d.id+"</div>"
+        + "<div class='tt-folder'>"+d.folder+"</div>"
+        + "<div class='tt-desc'>"+d.desc+"</div>"
+        + depsHtml + usedByHtml;
+      tooltip.style.opacity = "1";
+      moveTooltip(ev);
+    })
+    .on("mousemove", moveTooltip)
+    .on("mouseout",  function(){ tooltip.style.opacity = "0"; })
+    .on("click", function(ev, d){
+      ev.stopPropagation();
+      if (selectedId === d.id) { selectedId = null; clearHighlight(); }
+      else                     { selectedId = d.id; applyHighlight(d.id); }
+    });
+
+  svgEl.on("click", function(){ selectedId = null; clearHighlight(); });
+
+  // ── Tick ─────────────────────────────────────────────────────────────────────
+  simulation.on("tick", function(){
+    linkSel
+      .attr("x1", function(d){ return d.source.x; })
+      .attr("y1", function(d){ return d.source.y; })
+      .attr("x2", function(d){
+        var dx = d.target.x - d.source.x, dy = d.target.y - d.source.y;
+        var dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        return d.target.x - (dx / dist) * (NODE_R + 8);
+      })
+      .attr("y2", function(d){
+        var dx = d.target.x - d.source.x, dy = d.target.y - d.source.y;
+        var dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        return d.target.y - (dy / dist) * (NODE_R + 8);
+      });
+    nodeSel.attr("transform", function(d){ return "translate("+d.x+","+d.y+")"; });
+  });
+
+  // ── Controls ─────────────────────────────────────────────────────────────────
+  document.getElementById("dep-reset-zoom").addEventListener("click", function(){
+    svgEl.transition().duration(400).call(zoom.transform, d3.zoomIdentity);
+  });
+
+  document.getElementById("dep-reset-layout").addEventListener("click", function(){
+    nodes.forEach(function(d){
+      d.x = W/2 + (Math.random()-0.5)*180;
+      d.y = H/2 + (Math.random()-0.5)*180;
+      d.vx = 0; d.vy = 0;
+    });
+    simulation.alpha(1).restart();
+    selectedId = null;
+    clearHighlight();
+  });
+
+  // ── Legend ───────────────────────────────────────────────────────────────────
+  var legendEl = document.getElementById("dep-legend");
+  NS.forEach(function(ns){
+    var item = document.createElement("div");
+    item.className = "dep-legend-item";
+    item.title = ns.id;
+    item.innerHTML = "<div class='dep-legend-dot' style='background:"+ns.color+"'></div>" + ns.short;
+    item.addEventListener("click", function(){
+      if (selectedId === ns.id) { selectedId = null; clearHighlight(); }
+      else                      { selectedId = ns.id; applyHighlight(ns.id); }
+    });
+    legendEl.appendChild(item);
+  });
+
+  // ── Responsive resize ────────────────────────────────────────────────────────
+  window.addEventListener("resize", function(){
+    var newW = Math.max(wrap.clientWidth || 800, 400);
+    svgEl.attr("width", newW);
+    simulation.force("center", d3.forceCenter(newW/2, H/2)).alpha(0.3).restart();
+  });
+})();
 </script>
 </body>
 </html>

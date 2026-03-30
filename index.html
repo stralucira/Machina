@@ -283,9 +283,9 @@
   <p>Game-agnostic mobile game framework for Unity. Extracted from Sort Dash production codebase. Ready to use as a blank template for new games.</p>
   <div class="hero-badges">
     <span class="badge accent">Hybrid-Casual Ready</span>
-    <span class="badge accent">Unity 2022.3.62f1 LTS</span>
+    <span class="badge accent">Unity 2022.3.62f2 LTS</span>
     <span class="badge accent">iOS + Android</span>
-    <span class="badge accent">~280 framework classes</span>
+    <span class="badge accent">361 framework files</span>
     <span class="badge accent">LiveOps built-in</span>
   </div>
 </div>
@@ -297,76 +297,46 @@
   <div class="section-title"><span class="section-icon">⬡</span> Namespace Map</div>
 
   <div class="callout">
-    All framework code lives under <code>Assets/Scripts/Machina/</code>. Each subfolder has a canonical namespace.
-    
+    All framework code lives under <code>Assets/Scripts/Machina/</code>. Namespace boundaries are now type-driven:
+    behavior/state in <code>Machina</code>, data/config in <code>Machina.Core</code>, presentation in <code>Machina.UI</code>.
   </div>
 
   <div class="ns-map">
     <div class="ns-card" style="border-left-color: var(--ns-machina)">
       <div class="ns-card-name"><span class="dot" style="background:var(--ns-machina)"></span>Machina</div>
-      <div class="ns-card-folder">_Managers/ · _Controllers/ · _Interfaces/ · _Keys/ · root files</div>
-      <div class="ns-card-desc">Core singleton managers, controllers, interface contracts, config key constants. Logger and GameObjectToggler live here too.</div>
-      <div class="ns-card-count">~25 managers + controllers</div>
-    </div>
-    <div class="ns-card" style="border-left-color: var(--ns-gameplay)">
-      <div class="ns-card-name"><span class="dot" style="background:var(--ns-gameplay)"></span>Machina.Gameplay</div>
-      <div class="ns-card-folder">_Gameplay/</div>
-      <div class="ns-card-desc">Abstract puzzle-game framework: Item, ItemContainer, CollectionPoint, StorageTray, InputHandler, MovementHandler, ContainerSpawner, ContainerHandler, GridMath, Move, CustomFormationPreset.</div>
-      <div class="ns-card-count">11 files</div>
+      <div class="ns-card-folder">_Managers/ · _Controllers/ · _Interfaces/ · _Ads/ · _Adapters/ · _Leaderboard/ · behavior-layer root files</div>
+      <div class="ns-card-desc">Stateful behavior and orchestration: managers, controllers, singleton runtime systems, ad/IAP bridges, league runtime, meta flow controllers.</div>
+      <div class="ns-card-count">68 files</div>
     </div>
     <div class="ns-card" style="border-left-color: var(--ns-core)">
       <div class="ns-card-name"><span class="dot" style="background:var(--ns-core)"></span>Machina.Core</div>
-      <div class="ns-card-folder">_Core/</div>
-      <div class="ns-card-desc">Data types: Game, GameDemo, Reward, Price, Milestone, RewardGroup, Attempt, LevelAttempt, ChallengeAttempt, LevelStats, PlayerStats, ChallengeStats, TweenParameters, CameraTweenParams, MaterialSet, MetaMaterials, SceneMaterials, LevelDifficulty.</div>
-      <div class="ns-card-count">~22 files</div>
+      <div class="ns-card-folder">_Core/ · _Keys/ · _League(data) · _Meta(data) · _Analytics/ · _Collections(data) · data-layer root files</div>
+      <div class="ns-card-desc">Pure data/config layer: ScriptableObjects, enums, DTO/state containers, level/profile/daily-streak data, league/meta data models.</div>
+      <div class="ns-card-count">60 files</div>
+    </div>
+    <div class="ns-card" style="border-left-color: var(--ns-utils)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-utils)"></span>Machina.Utils</div>
+      <div class="ns-card-folder">_Utils/ · _Utils/Editor/ · utility root files</div>
+      <div class="ns-card-desc">Generic helpers and extension methods with low domain coupling: animation/util helpers, logger, dictionary wrappers, editor tooling.</div>
+      <div class="ns-card-count">20 files</div>
     </div>
     <div class="ns-card" style="border-left-color: var(--ns-ui)">
       <div class="ns-card-name"><span class="dot" style="background:var(--ns-ui)"></span>Machina.UI</div>
-      <div class="ns-card-folder">_UI/ · _DailyStreak/</div>
-      <div class="ns-card-desc">UIController, UIPanel, UIPopup, UIButton hierarchy. All display components, panels, popups, buttons, sliders, leaderboard UI, live-ops UI, tutorial overlay.</div>
-      <div class="ns-card-count">~178 files</div>
+      <div class="ns-card-folder">_UI/ · _DailyStreak/Calendar/ · _League(UI) · _Collections(UI)</div>
+      <div class="ns-card-desc">Presentation layer only: panels, popups, buttons, overlays, displays, leaderboard views, and all player-facing widgets.</div>
+      <div class="ns-card-count">178 files</div>
     </div>
     <div class="ns-card" style="border-left-color: var(--ns-events)">
       <div class="ns-card-name"><span class="dot" style="background:var(--ns-events)"></span>Machina.Events</div>
       <div class="ns-card-folder">_Events/</div>
-      <div class="ns-card-desc">Live ops event framework: GameFeature, TimedGameFeature, MilestonedGameFeature, Notification. Concrete events: MainLeagueEvent, WinStreakEvent, LavaQuestEvent, MemoryMadnessEvent, PiggyBank.</div>
-      <div class="ns-card-count">~24 files</div>
+      <div class="ns-card-desc">Live-ops event framework and concrete event implementations (WinStreak, MainLeague, LavaQuest, MemoryMadness, PiggyBank).</div>
+      <div class="ns-card-count">24 files</div>
     </div>
-    <div class="ns-card" style="border-left-color: var(--ns-league)">
-      <div class="ns-card-name"><span class="dot" style="background:var(--ns-league)"></span>Machina.League</div>
-      <div class="ns-card-folder">_League/ · _Leaderboard/</div>
-      <div class="ns-card-desc">Competitive league + leaderboard system: LeagueManager, LeagueInstance, LeagueGroup, LeagueConfig, User, BotProfile, UILeaderboard family.</div>
-      <div class="ns-card-count">~14 files</div>
-    </div>
-    <div class="ns-card" style="border-left-color: var(--ns-meta)">
-      <div class="ns-card-name"><span class="dot" style="background:var(--ns-meta)"></span>Machina.Meta</div>
-      <div class="ns-card-folder">_Meta/</div>
-      <div class="ns-card-desc">Meta-map overworld system: MetaController, MetaInputHandler, Area, Node, MetaData, MetaTutorialEvents.</div>
-      <div class="ns-card-count">~8 files</div>
-    </div>
-    <div class="ns-card" style="border-left-color: var(--ns-ads)">
-      <div class="ns-card-name"><span class="dot" style="background:var(--ns-ads)"></span>Machina.Ads</div>
-      <div class="ns-card-folder">_Ads/</div>
-      <div class="ns-card-desc">Ad system adapters: InterstitialAds, RewardedAds, BannerAds, InterPlacement, RvPlacement.</div>
-      <div class="ns-card-count">6 files</div>
-    </div>
-    <div class="ns-card" style="border-left-color: var(--ns-analytics)">
-      <div class="ns-card-name"><span class="dot" style="background:var(--ns-analytics)"></span>Machina.Analytics</div>
-      <div class="ns-card-folder">_Analytics/</div>
-      <div class="ns-card-desc">Analytics pipeline: MissionEventData, BalancySmartObjectEvents. Used by AnalyticsManager.</div>
-      <div class="ns-card-count">2 files</div>
-    </div>
-    <div class="ns-card" style="border-left-color: var(--ns-adapters)">
-      <div class="ns-card-name"><span class="dot" style="background:var(--ns-adapters)"></span>Machina.Adapters</div>
-      <div class="ns-card-folder">_Adapters/</div>
-      <div class="ns-card-desc">SDK bridges: RewardAdapter, InventoryAdapter, BalancyRemoteConfigProvider, BalancyProfileDataProvider, IAPAdapter, EventAdapterOverride, EconomyPromotion.</div>
-      <div class="ns-card-count">7 files</div>
-    </div>
-    <div class="ns-card" style="border-left-color: var(--ns-utils)">
-      <div class="ns-card-name"><span class="dot" style="background:var(--ns-utils)"></span>Machina.Utils</div>
-      <div class="ns-card-folder">_Utils/</div>
-      <div class="ns-card-desc">Utilities: DistributionUtils, Animate, KeyboardShortcuts, LevelDataCustomizer. Logger stays in root Machina namespace.</div>
-      <div class="ns-card-count">~5 files</div>
+    <div class="ns-card" style="border-left-color: var(--ns-gameplay)">
+      <div class="ns-card-name"><span class="dot" style="background:var(--ns-gameplay)"></span>Machina.Gameplay</div>
+      <div class="ns-card-folder">_Gameplay/</div>
+      <div class="ns-card-desc">Abstract puzzle mechanics and geometry helpers: Item graph, container abstractions, movement/input contracts, grid math.</div>
+      <div class="ns-card-count">11 files</div>
     </div>
   </div>
 </section>
@@ -626,7 +596,7 @@
         <tr><td class="mono">AssetManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Sprite and material asset loading, caching, and runtime retrieval.</td></tr>
         <tr><td class="mono">CollectionManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Player collection/inventory items with unlock and progression tracking.</td></tr>
         <tr><td class="mono">MetaManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Meta-map overworld state, area unlocks, node progression.</td></tr>
-        <tr><td class="mono">LeagueManager</td><td><span class="ns-tag">Machina.League</span></td><td class="desc">Creates, loads, and manages all LeagueGroup/LeagueInstance objects. Bot AI and score updates.</td></tr>
+        <tr><td class="mono">LeagueManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Creates, loads, and manages all LeagueGroup/LeagueInstance objects. Bot AI and score updates.</td></tr>
         <tr><td class="mono">PoolManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Generic object pool for any <code>IPoolable</code>. Static <code>Get&lt;T&gt;()</code> / <code>Release&lt;T&gt;()</code> API.</td></tr>
         <tr><td class="mono">TutorialManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">Step-based tutorial flow with gesture overlays and completion tracking.</td></tr>
         <tr><td class="mono">SoundManager</td><td><span class="ns-tag">Machina</span></td><td class="desc">SFX and music playback with pooling and fade control.</td></tr>
@@ -1100,7 +1070,7 @@
 </div><!-- /page -->
 
 <footer>
-  Machina Core Framework · MachinaGames · Unity 2022.3.62f1 LTS · Generated 2026-03-27
+  Machina Core Framework · MachinaGames · Unity 2022.3.62f2 LTS · Generated 2026-03-30
 </footer>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -1108,54 +1078,39 @@
 (function () {
   // ── Data ────────────────────────────────────────────────────────────────────
   var NS = [
-    { id: "Machina",           short: "Root",       color: "#58a6ff", folder: "_Managers/ · _Controllers/ · _Interfaces/ · _Keys/",
-      desc: "Core singleton managers, controllers, interface contracts, config key constants. Logger and GameObjectToggler live here.", files: "~25" },
-    { id: "Machina.Core",      short: "Core",        color: "#ffa657", folder: "_Core/",
-      desc: "Game, GameDemo, Reward, Price, Milestone, Attempt, LevelAttempt, PlayerStats, LevelStats, MaterialSet, MetaMaterials, SceneMaterials, TweenParameters.", files: "~22" },
-    { id: "Machina.Gameplay",  short: "Gameplay",    color: "#3fb950", folder: "_Gameplay/",
-      desc: "Item, ItemContainer, CollectionPoint, StorageTray, InputHandler, MovementHandler, ContainerSpawner, ContainerHandler, GridMath, Move, CustomFormationPreset.", files: "11" },
-    { id: "Machina.UI",        short: "UI",          color: "#bc8cff", folder: "_UI/ · _DailyStreak/",
-      desc: "UIController, UIPanel, UIPopup, UIButton hierarchy. All display components, panels, popups, buttons, leaderboard UI, live-ops UI, tutorial overlay.", files: "~178" },
-    { id: "Machina.Events",    short: "Events",      color: "#ff7b72", folder: "_Events/",
-      desc: "GameFeature, TimedGameFeature, MilestonedGameFeature, Notification. Concrete: MainLeagueEvent, WinStreakEvent, LavaQuestEvent, MemoryMadnessEvent, PiggyBank.", files: "~24" },
-    { id: "Machina.League",    short: "League",      color: "#d2a8ff", folder: "_League/ · _Leaderboard/",
-      desc: "LeagueManager, LeagueInstance, LeagueGroup, LeagueConfig, User, BotProfile, UILeaderboard family.", files: "~14" },
-    { id: "Machina.Meta",      short: "Meta",        color: "#56d364", folder: "_Meta/",
-      desc: "MetaController, MetaInputHandler, Area, Node, MetaData, MetaTutorialEvents.", files: "~8" },
-    { id: "Machina.Ads",       short: "Ads",         color: "#f78166", folder: "_Ads/",
-      desc: "InterstitialAds, RewardedAds, BannerAds, InterPlacement, RvPlacement.", files: "6" },
-    { id: "Machina.Analytics", short: "Analytics",   color: "#79c0ff", folder: "_Analytics/",
-      desc: "MissionEventData, BalancySmartObjectEvents. Used by AnalyticsManager.", files: "2" },
-    { id: "Machina.Adapters",  short: "Adapters",    color: "#e3b341", folder: "_Adapters/",
-      desc: "SDK bridges: RewardAdapter, InventoryAdapter, BalancyRemoteConfigProvider, BalancyProfileDataProvider, IAPAdapter, EventAdapterOverride, EconomyPromotion.", files: "7" },
-    { id: "Machina.Utils",     short: "Utils",       color: "#8b949e", folder: "_Utils/",
-      desc: "DistributionUtils, Animate, KeyboardShortcuts, LevelDataCustomizer. Logger stays in root Machina namespace.", files: "~5" },
+    { id: "Machina",           short: "Root",       color: "#58a6ff", folder: "_Managers/ · _Controllers/ · _Interfaces/ · _Ads/ · _Adapters/",
+      desc: "Stateful behavior and orchestration layer: managers, controllers, runtime systems, adapters, and league/meta flow logic.", files: "68" },
+    { id: "Machina.Core",      short: "Core",       color: "#ffa657", folder: "_Core/ · _Keys/ · _League(data) · _Meta(data) · _Analytics/ · _Collections(data)",
+      desc: "Pure data/config layer: enums, ScriptableObjects, state containers, profile/challenge/daily-streak data, and event payload types.", files: "60" },
+    { id: "Machina.Utils",     short: "Utils",      color: "#8b949e", folder: "_Utils/ · _Utils/Editor/ · root utility files",
+      desc: "Low-coupling utilities and extensions: logger, helpers, wrappers, and editor tooling.", files: "20" },
+    { id: "Machina.UI",        short: "UI",         color: "#bc8cff", folder: "_UI/ · _DailyStreak/Calendar/ · _League(UI) · _Collections(UI)",
+      desc: "Presentation layer for panels, popups, buttons, overlays, and all display components.", files: "178" },
+    { id: "Machina.Events",    short: "Events",     color: "#ff7b72", folder: "_Events/",
+      desc: "Live-ops framework and concrete events including WinStreak, MainLeague, LavaQuest, MemoryMadness, and PiggyBank.", files: "24" },
+    { id: "Machina.Gameplay",  short: "Gameplay",   color: "#3fb950", folder: "_Gameplay/",
+      desc: "Abstract puzzle mechanics: items, containers, input/movement contracts, spawners, and grid math.", files: "11" },
   ];
 
   // source depends on / uses types from target
   var DEPS = [
-    { source: "Machina.Core",      target: "Machina" },
-    { source: "Machina.Gameplay",  target: "Machina" },
-    { source: "Machina.Gameplay",  target: "Machina.Core" },
-    { source: "Machina.UI",        target: "Machina" },
-    { source: "Machina.UI",        target: "Machina.Core" },
-    { source: "Machina.UI",        target: "Machina.Events" },
-    { source: "Machina.UI",        target: "Machina.League" },
-    { source: "Machina.UI",        target: "Machina.Meta" },
-    { source: "Machina.UI",        target: "Machina.Ads" },
-    { source: "Machina.Ads",       target: "Machina" },
-    { source: "Machina.Analytics", target: "Machina" },
-    { source: "Machina.Analytics", target: "Machina.Adapters" },
-    { source: "Machina.Events",    target: "Machina" },
-    { source: "Machina.Events",    target: "Machina.Core" },
-    { source: "Machina.Events",    target: "Machina.League" },
-    { source: "Machina.League",    target: "Machina" },
-    { source: "Machina.League",    target: "Machina.Core" },
-    { source: "Machina.Meta",      target: "Machina" },
-    { source: "Machina.Meta",      target: "Machina.Core" },
-    { source: "Machina.Adapters",  target: "Machina" },
-    { source: "Machina.Adapters",  target: "Machina.Core" },
-    { source: "Machina.Utils",     target: "Machina" },
+    { source: "Machina",          target: "Machina.Core" },
+    { source: "Machina",          target: "Machina.Utils" },
+    { source: "Machina",          target: "Machina.Events" },
+    { source: "Machina",          target: "Machina.Gameplay" },
+    { source: "Machina.Core",     target: "Machina" },
+    { source: "Machina.Core",     target: "Machina.Utils" },
+    { source: "Machina.Gameplay", target: "Machina.Core" },
+    { source: "Machina.Gameplay", target: "Machina.Utils" },
+    { source: "Machina.UI",       target: "Machina" },
+    { source: "Machina.UI",       target: "Machina.Core" },
+    { source: "Machina.UI",       target: "Machina.Events" },
+    { source: "Machina.UI",       target: "Machina.Gameplay" },
+    { source: "Machina.UI",       target: "Machina.Utils" },
+    { source: "Machina.Events",   target: "Machina" },
+    { source: "Machina.Events",   target: "Machina.Core" },
+    { source: "Machina.Events",   target: "Machina.Utils" },
+    { source: "Machina.Utils",    target: "Machina" },
   ];
 
   // ── Setup ────────────────────────────────────────────────────────────────────

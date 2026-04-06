@@ -106,6 +106,19 @@
     100% { left: calc(100% + 3px); opacity: 0; }
   }
   .game-title { font-weight: 600; font-size: 16px; margin-top: 2px; }
+  .game-card.coming-soon {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
+  .game-card.coming-soon .belt-arrow { animation: none; opacity: 0; }
+  .coming-soon-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #6b7084;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
 
   .unlock-btn {
     padding: 12px 32px;
@@ -284,6 +297,18 @@
       </div>
       <span class="game-title">Sort Jam</span>
     </button>
+    <div class="game-card coming-soon">
+      <div class="ball-container">
+        <div class="belt-arrow"></div>
+        <div class="belt-arrow"></div>
+        <div class="belt-arrow"></div>
+        <div class="ball" style="background:#FF7043"></div>
+        <div class="ball" style="background:#18DCFF"></div>
+        <div class="ball" style="background:#FFC312"></div>
+      </div>
+      <span class="game-title">Goods Jam</span>
+      <span class="coming-soon-label">Coming Soon</span>
+    </div>
   </div>
   <button id="unlock-btn" class="unlock-btn">&#x1F512; Unlock</button>
 </div>

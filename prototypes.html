@@ -63,9 +63,49 @@
   }
   .game-card:hover { background: #1c2a4a; border-color: #3a4060; transform: translateY(-2px); }
   .game-card:active { transform: translateY(0); }
-  .game-icon { font-size: 36px; }
-  .game-title { font-weight: 600; font-size: 16px; }
-  .game-desc { font-size: 12px; color: #6b7084; text-align: center; }
+  .ball-container {
+    width: 64px;
+    height: 32px;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    gap: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ball {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .belt-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid rgba(255,255,255,0.25);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    z-index: 0;
+    animation: belt-slide 2s linear infinite;
+  }
+  .belt-arrow:nth-child(2) { animation-delay: -0.67s; }
+  .belt-arrow:nth-child(3) { animation-delay: -1.33s; }
+  @keyframes belt-slide {
+    0% { left: -8px; opacity: 0; }
+    10% { opacity: 0.35; }
+    90% { opacity: 0.35; }
+    100% { left: calc(100% + 3px); opacity: 0; }
+  }
+  .game-title { font-weight: 600; font-size: 16px; margin-top: 2px; }
 
   .unlock-btn {
     padding: 12px 32px;
@@ -223,14 +263,26 @@
   <p class="subtitle">Machina Games</p>
   <div class="game-grid">
     <button class="game-card" data-game="game-loop-jam.html">
-      <span class="game-icon">&#x1F504;</span>
+      <div class="ball-container">
+        <div class="belt-arrow"></div>
+        <div class="belt-arrow"></div>
+        <div class="belt-arrow"></div>
+        <div class="ball" style="background:#FF4757"></div>
+        <div class="ball" style="background:#3B9BFF"></div>
+        <div class="ball" style="background:#2ED573"></div>
+      </div>
       <span class="game-title">Loop Jam</span>
-      <span class="game-desc">Route passengers around the loop</span>
     </button>
     <button class="game-card" data-game="game-sort-jam.html">
-      <span class="game-icon">&#x1F500;</span>
+      <div class="ball-container">
+        <div class="belt-arrow"></div>
+        <div class="belt-arrow"></div>
+        <div class="belt-arrow"></div>
+        <div class="ball" style="background:#A55EEA"></div>
+        <div class="ball" style="background:#FFC312"></div>
+        <div class="ball" style="background:#FF6B9D"></div>
+      </div>
       <span class="game-title">Sort Jam</span>
-      <span class="game-desc">Sort passengers by color</span>
     </button>
   </div>
   <button id="unlock-btn" class="unlock-btn">&#x1F512; Unlock</button>

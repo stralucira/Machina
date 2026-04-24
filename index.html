@@ -272,6 +272,7 @@
     <a href="#ui">UI</a>
     <a href="#events">Live Ops</a>
     <a href="#patterns">Patterns</a>
+    <a href="#agent-docs">Agent Docs</a>
     <a href="#dependencies">Dependencies</a>
   </div>
   <div class="nav-tag">Unity 6 · C#</div>
@@ -983,6 +984,188 @@
       </tbody>
     </table>
   </div>
+</section>
+
+<!-- ═══════════════════════ AGENT DOCS ═══════════════════════ -->
+<style>
+  .agent-doc-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+    border-left: 3px solid var(--accent);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .agent-doc-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+  .agent-doc-card h4 {
+    font-family: monospace; font-size: 13px; color: var(--accent);
+    margin-bottom: 6px; letter-spacing: -0.3px;
+  }
+  .agent-doc-card .subtle { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+  .agent-doc-card p { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+
+  .agent-flow-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px;
+    font-family: monospace; font-size: 12.5px; line-height: 1.7;
+    color: var(--text-dim); white-space: pre; overflow-x: auto;
+  }
+  .agent-flow-box .flow-accent { color: var(--accent); font-weight: 600; }
+  .agent-flow-box .flow-mute { color: var(--text-muted); }
+  .agent-flow-box .flow-strong { color: var(--text); font-weight: 600; }
+
+  .agent-obs {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent5);
+    border-radius: 8px; padding: 14px 18px; margin-bottom: 12px;
+  }
+  .agent-obs h5 {
+    font-size: 13px; color: var(--accent5); margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .agent-obs p { font-size: 12.5px; color: var(--text-dim); line-height: 1.55; }
+</style>
+
+<section id="agent-docs">
+  <div class="section-title"><span class="section-icon">📘</span> Agent Documentation Files</div>
+
+  <div class="callout">
+    The repo uses a three-tier documentation system for coding agents (Claude Code, Cursor, Codex CLI, Gemini CLI, etc.).
+    Each file has a distinct role — <strong>auto-loaded overview</strong>, <strong>cross-tool overview</strong>, or <strong>deep reference</strong>.
+    Understanding the split helps you know what to read first when starting work.
+  </div>
+
+  <div class="table-wrap" style="margin-bottom: 24px">
+    <table class="class-table">
+      <thead><tr><th>File</th><th>Lines</th><th>Auto-loaded by</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="mono"><strong>CLAUDE.md</strong></td>
+          <td>193</td>
+          <td class="desc"><strong>Claude Code CLI</strong> — loaded into every session as system context</td>
+          <td class="desc">Project overview, quick reference for Claude</td>
+        </tr>
+        <tr>
+          <td class="mono"><strong>AGENTS.md</strong></td>
+          <td>193</td>
+          <td class="desc"><strong>Cross-agent convention</strong> — Cursor, OpenAI Codex CLI, Gemini CLI, and other coding agents auto-load this</td>
+          <td class="desc">Same content as CLAUDE.md, so any agent tool gets project context without vendor-specific filename knowledge</td>
+        </tr>
+        <tr>
+          <td class="mono"><strong>AGENT_ONBOARDING.md</strong></td>
+          <td>537</td>
+          <td class="desc"><strong>Nothing auto-loads it</strong> — an agent reads this when it needs depth</td>
+          <td class="desc">Deep reference: full architecture, history, current refactor tasks, conventions, file index</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="color: var(--text-dim); margin-bottom: 28px; font-size: 13px; line-height: 1.65">
+    The first two are <strong style="color: var(--text)">near-identical</strong> — <code>diff</code> shows only the title line differs.
+    That redundancy is deliberate: two copies of the same content for two different auto-discovery conventions.
+  </p>
+
+  <h3 style="font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 16px; letter-spacing: -0.2px">Discovery and loading</h3>
+
+  <div class="hierarchy-grid" style="margin-bottom: 32px">
+    <div class="agent-doc-card">
+      <h4>CLAUDE.md</h4>
+      <div class="subtle">Anthropic's convention</div>
+      <p>Claude Code CLI sessions receive this file as part of their system prompt automatically. This is how Claude "knows" project facts without needing to be told. The file is injected on every new session under a <code>#claudeMd</code> header.</p>
+    </div>
+    <div class="agent-doc-card">
+      <h4>AGENTS.md</h4>
+      <div class="subtle">Open cross-tool convention</div>
+      <p>When a developer opens the same repo in Cursor, or runs OpenAI's Codex CLI or similar, those tools look for <code>AGENTS.md</code> specifically. Having both files means the repo is tool-agnostic: any agent walks in with project context.</p>
+    </div>
+    <div class="agent-doc-card">
+      <h4>AGENT_ONBOARDING.md</h4>
+      <div class="subtle">Plain doc — linked, not auto-loaded</div>
+      <p>Not auto-loaded by any tool. Referenced from the repo's onboarding flow — a developer hands a new agent this file when the auto-loaded overview isn't deep enough.</p>
+    </div>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 16px; letter-spacing: -0.2px">Content split</h3>
+
+  <div class="two-col" style="margin-bottom: 32px">
+    <div class="hier-box">
+      <div class="hier-header">Overview (CLAUDE.md / AGENTS.md)</div>
+      <div class="hier-body">
+        <p style="color: var(--text-dim); font-size: 12.5px; margin-bottom: 10px">One-page summary scanned by an agent in seconds:</p>
+        <ul style="color: var(--text-dim); font-size: 12.5px; padding-left: 20px; line-height: 1.7">
+          <li>Build / run instructions</li>
+          <li>Folder layout at a high level</li>
+          <li>Key patterns (Manager&lt;T&gt;, Controllers, State Machine, Events, UI hierarchy)</li>
+          <li>Coding conventions (compressed)</li>
+          <li>SDK list and important notes</li>
+          <li>Framework Guides linking to <code>docs/</code> subsystem how-tos</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hier-box">
+      <div class="hier-header">Deep reference (AGENT_ONBOARDING.md)</div>
+      <div class="hier-body">
+        <p style="color: var(--text-dim); font-size: 12.5px; margin-bottom: 10px">537 lines, organized into 12 numbered sections:</p>
+        <ul style="color: var(--text-dim); font-size: 12.5px; padding-left: 20px; line-height: 1.65">
+          <li><strong style="color: var(--text)">§1</strong> What Machina Core is</li>
+          <li><strong style="color: var(--text)">§2</strong> Git workflow</li>
+          <li><strong style="color: var(--text)">§3</strong> Full folder layout</li>
+          <li><strong style="color: var(--text)">§4</strong> All 18 framework managers</li>
+          <li><strong style="color: var(--text)">§5</strong> LevelController/GameController architecture</li>
+          <li><strong style="color: var(--text)">§6</strong> Scene setup</li>
+          <li><strong style="color: var(--text)">§7</strong> History of the Sort Dash deletion pass</li>
+          <li><strong style="color: var(--text)">§8</strong> Current task — namespace consolidation (13 → 6)</li>
+          <li><strong style="color: var(--text)">§9</strong> Namespace convention table</li>
+          <li><strong style="color: var(--text)">§10</strong> Coding conventions</li>
+          <li><strong style="color: var(--text)">§11</strong> Do-not-touch paths</li>
+          <li><strong style="color: var(--text)">§12</strong> File quick-reference table</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 16px; letter-spacing: -0.2px">Current state — observations worth flagging</h3>
+
+  <div class="agent-obs">
+    <h5>CLAUDE.md and AGENTS.md are out of date</h5>
+    <p>They still describe "Sort Dash" as the active project with <code>Assets/Scripts/Game/</code> under the <code>Machina.Sortie</code> namespace. Line 187 reads <em>"New game logic goes in Assets/Scripts/Game/ under Machina.Sortie namespace"</em> — but that folder has been deleted (per AGENT_ONBOARDING.md §7, the Sort Dash deletion pass is complete). AGENT_ONBOARDING.md is the source of truth for current state; the overview docs have drifted.</p>
+  </div>
+
+  <div class="agent-obs">
+    <h5>They don't cross-reference each other</h5>
+    <p>CLAUDE.md and AGENTS.md contain no pointer to AGENT_ONBOARDING.md. An agent that only reads the auto-loaded CLAUDE.md never discovers the deep doc unless told. This is a mild footgun. A "Framework Guides" section was recently added to all three files to surface subsystem documentation (e.g. the power-ups implementation guide).</p>
+  </div>
+
+  <div class="agent-obs">
+    <h5><code>docs/</code> is the home for subsystem-specific guides</h5>
+    <p>AGENT_ONBOARDING.md is the "here's the whole framework" doc; <code>docs/powerup-implementation-guide.md</code> is the "here's how to use one subsystem" doc. Both CLAUDE.md and AGENTS.md now link to the power-ups guide from a "Framework Guides" section.</p>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 600; color: var(--text); margin: 28px 0 16px; letter-spacing: -0.2px">The intended flow</h3>
+
+  <div class="agent-flow-box"><span class="flow-strong">Agent opens repo</span>
+  <span class="flow-mute">│</span>
+  <span class="flow-mute">└─</span> <span class="flow-accent">auto-loads CLAUDE.md OR AGENTS.md</span>  <span class="flow-mute">(depending on tool)</span>
+     <span class="flow-mute">│</span>
+     <span class="flow-mute">├─</span> gets project-wide orientation in ~200 lines
+     <span class="flow-mute">└─</span> sees "Framework Guides" section + links to subsystem docs
+
+  <span class="flow-strong">If agent needs deeper context:</span>
+  <span class="flow-mute">│</span>
+  <span class="flow-mute">└─</span> dev or agent points to <span class="flow-accent">AGENT_ONBOARDING.md</span>
+     <span class="flow-mute">└─</span> reads 537 lines of detailed architecture + history
+
+  <span class="flow-strong">If agent needs to implement a subsystem:</span>
+  <span class="flow-mute">│</span>
+  <span class="flow-mute">└─</span> reads <span class="flow-accent">docs/&lt;feature&gt;-implementation-guide.md</span>
+     <span class="flow-mute">└─</span> e.g. the power-ups guide</div>
+
+  <p style="color: var(--text-dim); margin-top: 20px; font-size: 13px; line-height: 1.65; text-align: center">
+    <strong style="color: var(--text)">quick context (auto-loaded)</strong>
+    &nbsp;→&nbsp;
+    <strong style="color: var(--text)">deep reference (linked)</strong>
+    &nbsp;→&nbsp;
+    <strong style="color: var(--text)">subsystem how-tos (in <code>docs/</code>)</strong>
+  </p>
 </section>
 
 <!-- ═══════════════════════ DEPENDENCIES ═══════════════════════ -->
